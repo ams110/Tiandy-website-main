@@ -1,6 +1,22 @@
 import { supabase } from './supabase'
 import type { Category, Product } from './types'
 
+const MEDIA_BUCKET = 'tiandy-il-media'
+
+// ---- Media upload (admin) ----
+
+// Uploads an image file to Supabase Storage and returns its public URL.
+export async function uploadImage(file: File): Promise<string> {
+  const ext = file.name.split('.').pop()?.toLowerCase() || 'png'
+  const path = `products/${crypto.randomUUID()}.${ext}`
+  const { error } = await supabase.storage
+    .from(MEDIA_BUCKET)
+    .upload(path, file, { cacheControl: '3600', upsert: false })
+  if (error) throw error
+  const { data } = supabase.storage.from(MEDIA_BUCKET).getPublicUrl(path)
+  return data.publicUrl
+}
+
 // ---- Public reads (only active / non-deleted products) ----
 
 export async function getCategories(): Promise<Category[]> {

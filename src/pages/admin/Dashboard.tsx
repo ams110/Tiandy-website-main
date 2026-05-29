@@ -10,6 +10,7 @@ import {
   removeProduct,
   restoreProduct,
   destroyProduct,
+  uploadImage,
   type ProductInput,
 } from '../../lib/api'
 import type { Category, Product } from '../../lib/types'
@@ -36,7 +37,24 @@ export default function Dashboard() {
   const [form, setForm] = useState<ProductInput>(emptyForm)
   const [specsText, setSpecsText] = useState('{}')
   const [saving, setSaving] = useState(false)
+  const [uploading, setUploading] = useState(false)
   const [error, setError] = useState('')
+
+  async function handleImageFile(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0]
+    if (!file) return
+    setError('')
+    setUploading(true)
+    try {
+      const url = await uploadImage(file)
+      setForm((f) => ({ ...f, image_url: url }))
+    } catch (err) {
+      console.error(err)
+      setError('העלאת התמונה נכשלה. ודאו שאתם מחוברים ושהקובץ הוא תמונה.')
+    } finally {
+      setUploading(false)
+    }
+  }
 
   async function load() {
     setLoading(true)
@@ -292,13 +310,39 @@ export default function Dashboard() {
               </div>
 
               <div>
-                <label className="label">כתובת תמונה (URL)</label>
-                <input
-                  dir="ltr"
-                  className="field text-left"
-                  value={form.image_url ?? ''}
-                  onChange={(e) => setForm({ ...form, image_url: e.target.value })}
-                />
+                <label className="label">תמונת מוצר</label>
+                <div className="flex items-start gap-3">
+                  {form.image_url ? (
+                    <img
+                      src={form.image_url}
+                      alt="תצוגה מקדימה"
+                      className="h-20 w-20 shrink-0 rounded-lg border border-slate-200 object-cover"
+                    />
+                  ) : (
+                    <div className="flex h-20 w-20 shrink-0 items-center justify-center rounded-lg border border-dashed border-slate-300 text-xs text-slate-400">
+                      אין תמונה
+                    </div>
+                  )}
+                  <div className="flex-1 space-y-2">
+                    <label className="btn-outline cursor-pointer text-sm">
+                      {uploading ? 'מעלה…' : '⬆ העלאת תמונה מהמחשב'}
+                      <input
+                        type="file"
+                        accept="image/*"
+                        className="hidden"
+                        disabled={uploading}
+                        onChange={handleImageFile}
+                      />
+                    </label>
+                    <input
+                      dir="ltr"
+                      className="field text-left text-xs"
+                      placeholder="או הדביקו כתובת URL"
+                      value={form.image_url ?? ''}
+                      onChange={(e) => setForm({ ...form, image_url: e.target.value })}
+                    />
+                  </div>
+                </div>
               </div>
 
               <div>
