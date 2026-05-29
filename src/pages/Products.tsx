@@ -1,14 +1,20 @@
 import { useEffect, useState } from 'react'
+import { useSearchParams } from 'react-router-dom'
 import SectionTitle from '../components/SectionTitle'
 import ProductCard from '../components/ProductCard'
 import { getCategories, getProducts } from '../lib/api'
 import type { Category, Product } from '../lib/types'
 
 export default function Products() {
+  const [searchParams, setSearchParams] = useSearchParams()
   const [categories, setCategories] = useState<Category[]>([])
   const [products, setProducts] = useState<Product[]>([])
-  const [active, setActive] = useState<string>('') // '' = all
+  const active = searchParams.get('cat') ?? '' // '' = all
   const [loading, setLoading] = useState(true)
+
+  const setActive = (slug: string) => {
+    setSearchParams(slug ? { cat: slug } : {})
+  }
 
   useEffect(() => {
     getCategories().then(setCategories).catch(console.error)

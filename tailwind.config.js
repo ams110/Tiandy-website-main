@@ -4,18 +4,23 @@ export default {
   theme: {
     extend: {
       colors: {
-        // Brand palette — change here to re-theme the whole site
+        // Brand palette (corporate blue, security-vendor style) — re-theme here
         brand: {
-          50: '#e7f6f7',
-          100: '#c2e8ea',
-          200: '#8fd5d9',
-          300: '#54bdc3',
-          400: '#27a3aa',
-          500: '#0e8a92',
-          600: '#0a6f76',
-          700: '#0a585e',
-          800: '#0b474c',
-          900: '#0c3c40',
+          50: '#e8f1fb',
+          100: '#c7ddf5',
+          200: '#93bdec',
+          300: '#5b98df',
+          400: '#2e76d0',
+          500: '#1559b5',
+          600: '#0f4794',
+          700: '#0d3a77',
+          800: '#0c2f5f',
+          900: '#0a2547',
+        },
+        // Cyan accent for highlights / hover states
+        accent: {
+          400: '#22c1d6',
+          500: '#06a6c2',
         },
       },
       fontFamily: {
