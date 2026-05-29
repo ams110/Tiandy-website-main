@@ -22,8 +22,8 @@ jobs:
     env:
       # The Supabase publishable key is safe to expose in client builds (protected by RLS).
       # You can override these by adding repository Secrets with the same names.
-      VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL || 'https://rvhjrzbhugvytvktdhor.supabase.co' }}
-      VITE_SUPABASE_ANON_KEY: ${{ secrets.VITE_SUPABASE_ANON_KEY || 'sb_publishable_StYQEWIn705_V2lNNSITtg_ty04ZO5E' }}
+      VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL || 'https://ifdmvdurljbrnkezrohd.supabase.co' }}
+      VITE_SUPABASE_ANON_KEY: ${{ secrets.VITE_SUPABASE_ANON_KEY || 'sb_publishable_hJaMpol2IfB8C6TMXHoFFA_xA0Vj4la' }}
     steps:
       - uses: actions/checkout@v4
 
