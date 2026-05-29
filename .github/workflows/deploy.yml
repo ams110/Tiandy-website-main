@@ -32,6 +32,11 @@ jobs:
           node-version: 20
           cache: npm
 
+      # Enable Pages automatically (no manual Settings toggle needed)
+      - uses: actions/configure-pages@v5
+        with:
+          enablement: true
+
       - run: npm ci
 
       - run: npm run build
