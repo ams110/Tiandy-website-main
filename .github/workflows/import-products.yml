@@ -1,0 +1,36 @@
+name: Import Products from Excel
+
+on:
+  workflow_dispatch:
+    inputs:
+      excel_file:
+        description: 'Path to Excel file in repo'
+        required: false
+        default: 'data/products.xlsx'
+      dry_run:
+        description: 'Dry run — preview only, do not save'
+        type: boolean
+        required: false
+        default: false
+
+jobs:
+  import:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install import dependencies
+        run: npm install xlsx @supabase/supabase-js
+        working-directory: scripts
+
+      - name: Run product import
+        run: node scripts/import-products.mjs
+        env:
+          SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
+          SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
+          EXCEL_FILE: ${{ inputs.excel_file }}
+          DRY_RUN: ${{ inputs.dry_run }}

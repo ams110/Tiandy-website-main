@@ -2,18 +2,24 @@ import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import SectionTitle from '../components/SectionTitle'
 import ProductCard from '../components/ProductCard'
-import { getFeaturedProducts, getCategories } from '../lib/api'
-import type { Product, Category } from '../lib/types'
-import { hero, stats, solutions } from '../data/content'
+import { getFeaturedProducts, getCategories, getSettings } from '../lib/api'
+import type { Product, Category, SiteSettings } from '../lib/types'
+import { hero as heroDefaults, stats, solutions } from '../data/content'
 
 export default function Home() {
   const [featured, setFeatured] = useState<Product[]>([])
   const [categories, setCategories] = useState<Category[]>([])
+  const [settings, setSettings] = useState<SiteSettings>({})
 
   useEffect(() => {
     getFeaturedProducts().then(setFeatured).catch((e) => console.error(e))
     getCategories().then(setCategories).catch((e) => console.error(e))
+    getSettings().then(setSettings).catch((e) => console.error(e))
   }, [])
+
+  const heroImageUrl = settings.hero_image_url ?? 'https://images.unsplash.com/photo-1551808525-51a94da548ce?w=1600&q=80'
+  const heroTitle    = settings.hero_title    ?? heroDefaults.title
+  const heroSubtitle = settings.hero_subtitle ?? heroDefaults.subtitle
 
   return (
     <>
@@ -21,30 +27,22 @@ export default function Home() {
       <section className="relative overflow-hidden bg-brand-900 text-white">
         <div
           className="absolute inset-0 bg-cover bg-center opacity-30"
-          style={{
-            backgroundImage:
-              "url('https://images.unsplash.com/photo-1551808525-51a94da548ce?w=1600&q=80')",
-          }}
+          style={{ backgroundImage: `url('${heroImageUrl}')` }}
         />
         <div className="absolute inset-0 bg-gradient-to-l from-brand-900/95 via-brand-900/80 to-brand-800/40" />
         <div className="container relative py-24 md:py-32">
           <div className="max-w-2xl">
-            <span className="mb-4 inline-block rounded-full bg-accent-500/20 px-3 py-1 text-sm font-medium text-accent-400">
-              {hero.subtitle}
-            </span>
-            <h1 className="text-4xl font-extrabold leading-tight md:text-6xl">{hero.title}</h1>
-            <p className="mt-5 max-w-lg text-lg text-brand-100">
-              ספקית פתרונות וידאו חכמים — מצלמות, מקליטים ואנליטיקת AI לעסקים ולמוסדות.
-            </p>
+            <h1 className="text-4xl font-extrabold leading-tight md:text-6xl">{heroTitle}</h1>
+            <p className="mt-5 max-w-lg text-lg text-brand-100">{heroSubtitle}</p>
             <div className="mt-8 flex flex-wrap gap-3">
-              <Link to={hero.primaryCta.to} className="btn bg-accent-500 text-white hover:bg-accent-400">
-                {hero.primaryCta.label}
+              <Link to={heroDefaults.primaryCta.to} className="btn bg-accent-500 text-white hover:bg-accent-400">
+                {heroDefaults.primaryCta.label}
               </Link>
               <Link
-                to={hero.secondaryCta.to}
+                to={heroDefaults.secondaryCta.to}
                 className="btn border border-white/60 text-white hover:bg-white/10"
               >
-                {hero.secondaryCta.label}
+                {heroDefaults.secondaryCta.label}
               </Link>
             </div>
           </div>

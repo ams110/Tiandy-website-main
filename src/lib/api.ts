@@ -17,6 +17,38 @@ export async function uploadImage(file: File): Promise<string> {
   return data.publicUrl
 }
 
+// ---- Site settings ----
+
+export type SiteSettings = Record<string, string>
+
+export async function getSettings(): Promise<SiteSettings> {
+  const { data, error } = await supabase
+    .from('tiandy_il_settings')
+    .select('key, value')
+  if (error) throw error
+  return Object.fromEntries((data ?? []).map((r) => [r.key, r.value]))
+}
+
+export async function updateSetting(key: string, value: string): Promise<void> {
+  const { error } = await supabase
+    .from('tiandy_il_settings')
+    .upsert({ key, value, updated_at: new Date().toISOString() }, { onConflict: 'key' })
+  if (error) throw error
+}
+
+// ---- Media upload (admin) ----
+
+export async function uploadHeroImage(file: File): Promise<string> {
+  const ext = file.name.split('.').pop()?.toLowerCase() || 'jpg'
+  const path = `hero/hero.${ext}`
+  const { error } = await supabase.storage
+    .from(MEDIA_BUCKET)
+    .upload(path, file, { cacheControl: '3600', upsert: true })
+  if (error) throw error
+  const { data } = supabase.storage.from(MEDIA_BUCKET).getPublicUrl(path)
+  return data.publicUrl + '?t=' + Date.now()
+}
+
 // ---- Public reads (only active / non-deleted products) ----
 
 export async function getCategories(): Promise<Category[]> {

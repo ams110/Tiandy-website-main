@@ -1,0 +1,3 @@
+name_he,slug,category_slug,short_desc_he,description_he,image,specs,is_featured,sort
+מצלמת כדור 4MP,tc-ip-ball-4mp,ip-cameras,מצלמה רשתית איכותית לשימוש פנים,מצלמת IP ברזולוציה 4MP עם WDR מלא,ball-4mp.jpg,"{""resolution"":""4MP"",""lens"":""2.8mm""}",true,1
+מקליט 8 ערוצים,tc-nvr-8ch,nvr,מקליט רשתי 8 ערוצים,תומך עד 8 מצלמות IP ברזולוציה מלאה,nvr-8ch.jpg,"{""channels"":""8"",""hdd"":""2TB""}",false,10

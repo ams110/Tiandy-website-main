@@ -1,3 +1,5 @@
+export type SiteSettings = Record<string, string>
+
 export interface Category {
   id: string
   slug: string
