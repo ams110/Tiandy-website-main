@@ -18,6 +18,8 @@ import {
 } from '../../lib/api'
 import type { Category, Product, SiteSettings } from '../../lib/types'
 
+type BulkResult = { file: string; status: 'ok' | 'error' | 'notfound'; message?: string }
+
 const emptyForm: ProductInput = {
   category_id: null,
   slug: '',
@@ -52,6 +54,10 @@ export default function Dashboard() {
   const [settingsUploading, setSettingsUploading] = useState(false)
   const [settingsMsg, setSettingsMsg] = useState('')
 
+  // ── Bulk upload state ──
+  const [bulkResults, setBulkResults] = useState<BulkResult[]>([])
+  const [bulkProgress, setBulkProgress] = useState<{ done: number; total: number } | null>(null)
+
   async function handleImageFile(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0]
     if (!file) return
@@ -66,6 +72,43 @@ export default function Dashboard() {
     } finally {
       setUploading(false)
     }
+  }
+
+  async function handleBulkUpload(e: React.ChangeEvent<HTMLInputElement>) {
+    const files = Array.from(e.target.files ?? [])
+    if (!files.length) return
+    setBulkResults([])
+    setBulkProgress({ done: 0, total: files.length })
+    const results: BulkResult[] = []
+
+    for (let i = 0; i < files.length; i++) {
+      const file = files[i]
+      const slug = file.name.replace(/\.[^.]+$/, '').toLowerCase().trim()
+      const product = products.find((p) => p.slug === slug)
+
+      if (!product) {
+        results.push({ file: file.name, status: 'notfound', message: `לא נמצא מוצר עם slug "${slug}"` })
+        setBulkProgress({ done: i + 1, total: files.length })
+        setBulkResults([...results])
+        continue
+      }
+
+      try {
+        const url = await uploadImage(file)
+        await updateProduct(product.id, { image_url: url })
+        setProducts((prev) => prev.map((p) => p.id === product.id ? { ...p, image_url: url } : p))
+        results.push({ file: file.name, status: 'ok', message: product.name_he })
+      } catch (err) {
+        console.error(err)
+        results.push({ file: file.name, status: 'error', message: 'שגיאה בהעלאה' })
+      }
+
+      setBulkProgress({ done: i + 1, total: files.length })
+      setBulkResults([...results])
+    }
+
+    // reset input so same files can be re-uploaded
+    e.target.value = ''
   }
 
   async function load() {
@@ -322,6 +365,51 @@ export default function Dashboard() {
 
         {/* ── Products tab ── */}
         {tab === 'products' && (<>
+
+        {/* Bulk image upload */}
+        <div className="mb-6 rounded-xl border border-brand-200 bg-brand-50 p-4">
+          <div className="flex flex-wrap items-center gap-4">
+            <div>
+              <p className="text-sm font-bold text-brand-800">העלאת תמונות בכמות</p>
+              <p className="text-xs text-brand-600">
+                בחרו מספר קבצים — שם הקובץ חייב להיות ה-slug של המוצר (לדוגמה: <code className="font-mono">tc-c32qv-2fna-28.jpg</code>)
+              </p>
+            </div>
+            <label className={`btn-primary cursor-pointer text-sm ${bulkProgress && bulkProgress.done < bulkProgress.total ? 'opacity-60 pointer-events-none' : ''}`}>
+              {bulkProgress && bulkProgress.done < bulkProgress.total
+                ? `מעלה ${bulkProgress.done}/${bulkProgress.total}…`
+                : '⬆ בחירת תמונות'}
+              <input
+                type="file"
+                accept="image/*"
+                multiple
+                className="hidden"
+                onChange={handleBulkUpload}
+                disabled={!!(bulkProgress && bulkProgress.done < bulkProgress.total)}
+              />
+            </label>
+            {bulkProgress && (
+              <span className="text-xs text-brand-700">
+                {bulkProgress.done}/{bulkProgress.total} קבצים
+              </span>
+            )}
+          </div>
+
+          {bulkResults.length > 0 && (
+            <div className="mt-3 max-h-40 overflow-y-auto rounded-lg border border-brand-200 bg-white p-2 text-xs space-y-1">
+              {bulkResults.map((r, i) => (
+                <div key={i} className="flex items-center gap-2">
+                  <span className={r.status === 'ok' ? 'text-green-600' : r.status === 'notfound' ? 'text-amber-600' : 'text-red-600'}>
+                    {r.status === 'ok' ? '✓' : r.status === 'notfound' ? '?' : '✗'}
+                  </span>
+                  <span className="font-mono text-slate-500">{r.file}</span>
+                  {r.message && <span className="text-slate-400">— {r.message}</span>}
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+
         <div className="mb-6 flex items-center justify-between">
           <div>
             <h1 className="text-2xl font-extrabold text-slate-900">ניהול מוצרים</h1>
