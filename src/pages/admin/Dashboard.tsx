@@ -14,9 +14,14 @@ import {
   uploadHeroImage,
   getSettings,
   updateSetting,
+  getAllBannersAdmin,
+  createBanner,
+  updateBanner,
+  deleteBanner,
   type ProductInput,
+  type BannerInput,
 } from '../../lib/api'
-import type { Category, Product, SiteSettings } from '../../lib/types'
+import type { Banner, Category, Product, SiteSettings } from '../../lib/types'
 
 type BulkResult = { file: string; status: 'ok' | 'error' | 'notfound'; message?: string }
 
@@ -32,9 +37,24 @@ const emptyForm: ProductInput = {
   sort: 0,
 }
 
+const POSITION_LABELS: Record<string, string> = {
+  hero:  'סליידר ראשי',
+  promo: 'בנר מבצע',
+  mid:   'בנר אמצע',
+}
+
+const emptyBannerForm: BannerInput = {
+  image_url: '',
+  link_url: '',
+  title_he: '',
+  position: 'hero',
+  is_active: true,
+  sort: 10,
+}
+
 export default function Dashboard() {
   const { signOut } = useAuth()
-  const [tab, setTab] = useState<'products' | 'settings'>('products')
+  const [tab, setTab] = useState<'products' | 'settings' | 'banners'>('products')
 
   // ── Products state ──
   const [products, setProducts] = useState<Product[]>([])
@@ -57,6 +77,12 @@ export default function Dashboard() {
   // ── Bulk upload state ──
   const [bulkResults, setBulkResults] = useState<BulkResult[]>([])
   const [bulkProgress, setBulkProgress] = useState<{ done: number; total: number } | null>(null)
+
+  // ── Banners state ──
+  const [banners, setBanners] = useState<Banner[]>([])
+  const [bannerForm, setBannerForm] = useState<BannerInput>(emptyBannerForm)
+  const [bannerSaving, setBannerSaving] = useState(false)
+  const [bannerMsg, setBannerMsg] = useState('')
 
   async function handleImageFile(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0]
@@ -169,9 +195,48 @@ export default function Dashboard() {
     }
   }
 
+  async function loadBanners() {
+    try { setBanners(await getAllBannersAdmin()) } catch (e) { console.error(e) }
+  }
+
+  async function handleBannerToggle(b: Banner) {
+    try {
+      const updated = await updateBanner(b.id, { is_active: !b.is_active })
+      setBanners((prev) => prev.map((x) => x.id === updated.id ? updated : x))
+    } catch (e) { console.error(e) }
+  }
+
+  async function handleBannerDelete(b: Banner) {
+    if (!confirm('למחוק את הבאנר?')) return
+    await deleteBanner(b.id)
+    setBanners((prev) => prev.filter((x) => x.id !== b.id))
+  }
+
+  async function handleBannerSave(e: React.FormEvent) {
+    e.preventDefault()
+    setBannerMsg('')
+    setBannerSaving(true)
+    try {
+      const created = await createBanner({
+        ...bannerForm,
+        link_url: bannerForm.link_url || null,
+        title_he: bannerForm.title_he || null,
+      })
+      setBanners((prev) => [...prev, created])
+      setBannerForm(emptyBannerForm)
+      setBannerMsg('✓ הבאנר נוסף')
+    } catch (err) {
+      console.error(err)
+      setBannerMsg('✗ שגיאה בשמירה')
+    } finally {
+      setBannerSaving(false)
+    }
+  }
+
   useEffect(() => {
     load()
     loadSettings()
+    loadBanners()
   }, [])
 
   function openCreate() {
@@ -264,7 +329,7 @@ export default function Dashboard() {
         </div>
         {/* Tabs */}
         <div className="container flex gap-6 border-t border-slate-100">
-          {(['products', 'settings'] as const).map((t) => (
+          {(['products', 'banners', 'settings'] as const).map((t) => (
             <button
               key={t}
               onClick={() => setTab(t)}
@@ -274,7 +339,7 @@ export default function Dashboard() {
                   : 'border-transparent text-slate-500 hover:text-slate-700'
               }`}
             >
-              {t === 'products' ? 'ניהול מוצרים' : 'הגדרות האתר'}
+              {t === 'products' ? 'ניהול מוצרים' : t === 'banners' ? 'ניהול באנרים' : 'הגדרות האתר'}
             </button>
           ))}
         </div>
@@ -357,6 +422,148 @@ export default function Dashboard() {
               <div className="flex justify-end">
                 <button type="submit" disabled={settingsSaving} className="btn-primary disabled:opacity-60">
                   {settingsSaving ? 'שומר…' : 'שמירה'}
+                </button>
+              </div>
+            </form>
+          </div>
+        )}
+
+        {/* ── Banners tab ── */}
+        {tab === 'banners' && (
+          <div className="mx-auto max-w-3xl">
+            <h1 className="mb-6 text-2xl font-extrabold text-slate-900">ניהול באנרים</h1>
+
+            {/* Banner list */}
+            {(['hero', 'promo', 'mid'] as const).map((pos) => {
+              const group = banners.filter((b) => b.position === pos)
+              return (
+                <div key={pos} className="card mb-6 overflow-hidden">
+                  <div className="flex items-center justify-between border-b border-slate-100 px-4 py-3">
+                    <span className="font-semibold text-slate-800">{POSITION_LABELS[pos]}</span>
+                    <span className="text-xs text-slate-400">{group.length} באנרים</span>
+                  </div>
+                  {group.length === 0 ? (
+                    <p className="px-4 py-3 text-sm text-slate-400">אין באנרים עדיין</p>
+                  ) : (
+                    <ul className="divide-y divide-slate-100">
+                      {group.map((b) => (
+                        <li key={b.id} className="flex items-center gap-3 px-4 py-3">
+                          <img
+                            src={b.image_url}
+                            alt=""
+                            className="h-14 w-24 shrink-0 rounded-lg object-cover border border-slate-200"
+                          />
+                          <div className="flex-1 min-w-0">
+                            {b.title_he && (
+                              <p className="truncate text-sm font-medium text-slate-700">{b.title_he}</p>
+                            )}
+                            {b.link_url && (
+                              <p className="truncate text-xs text-slate-400 font-mono">{b.link_url}</p>
+                            )}
+                            <p className="text-xs text-slate-400">סדר: {b.sort}</p>
+                          </div>
+                          <div className="flex shrink-0 items-center gap-3">
+                            <button
+                              onClick={() => handleBannerToggle(b)}
+                              className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${b.is_active ? 'bg-brand-500' : 'bg-slate-300'}`}
+                              title={b.is_active ? 'לחצו להשבתה' : 'לחצו להפעלה'}
+                            >
+                              <span className={`inline-block h-4 w-4 transform rounded-full bg-white shadow transition-transform ${b.is_active ? 'translate-x-6' : 'translate-x-1'}`} />
+                            </button>
+                            <button
+                              onClick={() => handleBannerDelete(b)}
+                              className="text-red-500 hover:text-red-700 text-sm"
+                              title="מחיקה"
+                            >
+                              ✕
+                            </button>
+                          </div>
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+                </div>
+              )
+            })}
+
+            {/* Add banner form */}
+            <form onSubmit={handleBannerSave} className="card p-6 space-y-4">
+              <h2 className="text-base font-bold text-slate-800">הוספת באנר חדש</h2>
+
+              <div>
+                <label className="label">כתובת תמונה (URL) *</label>
+                <input
+                  required
+                  dir="ltr"
+                  className="field text-left"
+                  placeholder="https://..."
+                  value={bannerForm.image_url}
+                  onChange={(e) => setBannerForm({ ...bannerForm, image_url: e.target.value })}
+                />
+              </div>
+
+              <div className="grid gap-4 sm:grid-cols-2">
+                <div>
+                  <label className="label">מיקום *</label>
+                  <select
+                    className="field"
+                    value={bannerForm.position}
+                    onChange={(e) => setBannerForm({ ...bannerForm, position: e.target.value as BannerInput['position'] })}
+                  >
+                    <option value="hero">סליידר ראשי</option>
+                    <option value="promo">בנר מבצע (אחרי הכותרת)</option>
+                    <option value="mid">בנר אמצע עמוד</option>
+                  </select>
+                </div>
+                <div>
+                  <label className="label">סדר תצוגה</label>
+                  <input
+                    type="number"
+                    className="field"
+                    value={bannerForm.sort}
+                    onChange={(e) => setBannerForm({ ...bannerForm, sort: Number(e.target.value) })}
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label className="label">כתובת קישור (אופציונלי)</label>
+                <input
+                  dir="ltr"
+                  className="field text-left"
+                  placeholder="https://..."
+                  value={bannerForm.link_url ?? ''}
+                  onChange={(e) => setBannerForm({ ...bannerForm, link_url: e.target.value })}
+                />
+              </div>
+
+              <div>
+                <label className="label">כיתוב / כותרת (עברית, אופציונלי)</label>
+                <input
+                  className="field"
+                  value={bannerForm.title_he ?? ''}
+                  onChange={(e) => setBannerForm({ ...bannerForm, title_he: e.target.value })}
+                />
+              </div>
+
+              <label className="flex items-center gap-2 text-sm text-slate-700">
+                <input
+                  type="checkbox"
+                  checked={bannerForm.is_active}
+                  onChange={(e) => setBannerForm({ ...bannerForm, is_active: e.target.checked })}
+                />
+                פעיל (מוצג באתר)
+              </label>
+
+              {bannerMsg && (
+                <p className={`text-sm ${bannerMsg.startsWith('✓') ? 'text-green-600' : 'text-red-600'}`}>
+                  {bannerMsg}
+                </p>
+              )}
+
+              <div className="flex justify-end">
+                <button type="submit" disabled={bannerSaving} className="btn-primary disabled:opacity-60">
+                  {bannerSaving ? 'שומר…' : '+ הוסף באנר'}
                 </button>
               </div>
             </form>
