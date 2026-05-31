@@ -1,5 +1,5 @@
 import { supabase } from './supabase'
-import type { Category, Product } from './types'
+import type { Banner, Category, Product } from './types'
 
 const MEDIA_BUCKET = 'tiandy-il-media'
 
@@ -160,6 +160,59 @@ export async function restoreProduct(id: string): Promise<void> {
 export async function destroyProduct(id: string): Promise<void> {
   const { error } = await supabase
     .from('tiandy_il_products')
+    .delete()
+    .eq('id', id)
+  if (error) throw error
+}
+
+// ---- Banners ----
+
+export async function getBanners(): Promise<Banner[]> {
+  const { data, error } = await supabase
+    .from('tiandy_il_banners')
+    .select('*')
+    .eq('is_active', true)
+    .order('sort', { ascending: true })
+  if (error) throw error
+  return data ?? []
+}
+
+export async function getAllBannersAdmin(): Promise<Banner[]> {
+  const { data, error } = await supabase
+    .from('tiandy_il_banners')
+    .select('*')
+    .order('position', { ascending: true })
+    .order('sort', { ascending: true })
+  if (error) throw error
+  return data ?? []
+}
+
+export type BannerInput = Omit<Banner, 'id' | 'created_at'>
+
+export async function createBanner(input: BannerInput): Promise<Banner> {
+  const { data, error } = await supabase
+    .from('tiandy_il_banners')
+    .insert(input)
+    .select()
+    .single()
+  if (error) throw error
+  return data
+}
+
+export async function updateBanner(id: string, patch: Partial<BannerInput>): Promise<Banner> {
+  const { data, error } = await supabase
+    .from('tiandy_il_banners')
+    .update(patch)
+    .eq('id', id)
+    .select()
+    .single()
+  if (error) throw error
+  return data
+}
+
+export async function deleteBanner(id: string): Promise<void> {
+  const { error } = await supabase
+    .from('tiandy_il_banners')
     .delete()
     .eq('id', id)
   if (error) throw error

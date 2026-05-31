@@ -1,5 +1,16 @@
 export type SiteSettings = Record<string, string>
 
+export interface Banner {
+  id: string
+  image_url: string
+  link_url: string | null
+  title_he: string | null
+  position: 'hero' | 'promo' | 'mid'
+  is_active: boolean
+  sort: number
+  created_at: string
+}
+
 export interface Category {
   id: string
   slug: string

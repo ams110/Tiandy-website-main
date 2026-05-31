@@ -1,21 +1,98 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 import SectionTitle from '../components/SectionTitle'
 import ProductCard from '../components/ProductCard'
-import { getFeaturedProducts, getCategories, getSettings } from '../lib/api'
-import type { Product, Category, SiteSettings } from '../lib/types'
+import { getFeaturedProducts, getCategories, getSettings, getBanners } from '../lib/api'
+import type { Banner, Product, Category, SiteSettings } from '../lib/types'
 import { hero as heroDefaults, stats, solutions } from '../data/content'
+
+function BannerSlider({ banners }: { banners: Banner[] }) {
+  const [cur, setCur] = useState(0)
+  const timerRef = useRef<ReturnType<typeof setInterval> | null>(null)
+
+  useEffect(() => {
+    if (banners.length <= 1) return
+    timerRef.current = setInterval(() => setCur((c) => (c + 1) % banners.length), 5000)
+    return () => { if (timerRef.current) clearInterval(timerRef.current) }
+  }, [banners.length])
+
+  if (!banners.length) return null
+
+  return (
+    <div className="relative overflow-hidden bg-black" style={{ height: 'clamp(220px, 40vw, 500px)' }}>
+      {banners.map((b, i) => (
+        <div
+          key={b.id}
+          className="absolute inset-0 transition-opacity duration-700"
+          style={{ opacity: i === cur ? 1 : 0, pointerEvents: i === cur ? 'auto' : 'none' }}
+        >
+          {b.link_url ? (
+            <a href={b.link_url} target="_blank" rel="noopener noreferrer" className="block h-full">
+              <img src={b.image_url} alt={b.title_he ?? ''} className="h-full w-full object-cover" />
+            </a>
+          ) : (
+            <img src={b.image_url} alt={b.title_he ?? ''} className="h-full w-full object-cover" />
+          )}
+          {b.title_he && (
+            <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/60 to-transparent px-6 pb-4 pt-8 text-white">
+              <p className="text-base font-semibold md:text-xl">{b.title_he}</p>
+            </div>
+          )}
+        </div>
+      ))}
+      {banners.length > 1 && (
+        <div className="absolute bottom-3 left-0 right-0 flex justify-center gap-2 z-10">
+          {banners.map((_, i) => (
+            <button
+              key={i}
+              onClick={() => {
+                setCur(i)
+                if (timerRef.current) { clearInterval(timerRef.current); timerRef.current = null }
+              }}
+              className={`h-2.5 w-2.5 rounded-full transition-all ${i === cur ? 'bg-white scale-110' : 'bg-white/50 hover:bg-white/80'}`}
+            />
+          ))}
+        </div>
+      )}
+    </div>
+  )
+}
+
+function PromoBanner({ banners }: { banners: Banner[] }) {
+  if (!banners.length) return null
+  return (
+    <section className="bg-white py-4">
+      <div className="container space-y-3">
+        {banners.map((b) =>
+          b.link_url ? (
+            <a key={b.id} href={b.link_url} target="_blank" rel="noopener noreferrer" className="block">
+              <img src={b.image_url} alt={b.title_he ?? ''} className="w-full rounded-xl object-cover shadow-sm" />
+            </a>
+          ) : (
+            <img key={b.id} src={b.image_url} alt={b.title_he ?? ''} className="w-full rounded-xl object-cover shadow-sm" />
+          )
+        )}
+      </div>
+    </section>
+  )
+}
 
 export default function Home() {
   const [featured, setFeatured] = useState<Product[]>([])
   const [categories, setCategories] = useState<Category[]>([])
   const [settings, setSettings] = useState<SiteSettings>({})
+  const [banners, setBanners] = useState<Banner[]>([])
 
   useEffect(() => {
     getFeaturedProducts().then(setFeatured).catch((e) => console.error(e))
     getCategories().then(setCategories).catch((e) => console.error(e))
     getSettings().then(setSettings).catch((e) => console.error(e))
+    getBanners().then(setBanners).catch((e) => console.error(e))
   }, [])
+
+  const heroBanners  = banners.filter((b) => b.position === 'hero')
+  const promoBanners = banners.filter((b) => b.position === 'promo')
+  const midBanners   = banners.filter((b) => b.position === 'mid')
 
   const heroImageUrl = settings.hero_image_url ?? 'https://images.unsplash.com/photo-1551808525-51a94da548ce?w=1600&q=80'
   const heroTitle    = settings.hero_title    ?? heroDefaults.title
@@ -48,6 +125,12 @@ export default function Home() {
           </div>
         </div>
       </section>
+
+      {/* Hero banner slider */}
+      {heroBanners.length > 0 && <BannerSlider banners={heroBanners} />}
+
+      {/* Promo banner strip */}
+      <PromoBanner banners={promoBanners} />
 
       {/* Product categories strip */}
       <section className="border-b border-slate-200 bg-white">
@@ -102,6 +185,23 @@ export default function Home() {
           </Link>
         </div>
       </section>
+
+      {/* Mid-page promotional banner */}
+      {midBanners.length > 0 && (
+        <section className="py-4">
+          <div className="container space-y-3">
+            {midBanners.map((b) =>
+              b.link_url ? (
+                <a key={b.id} href={b.link_url} target="_blank" rel="noopener noreferrer" className="block">
+                  <img src={b.image_url} alt={b.title_he ?? ''} className="w-full rounded-xl object-cover shadow-sm" />
+                </a>
+              ) : (
+                <img key={b.id} src={b.image_url} alt={b.title_he ?? ''} className="w-full rounded-xl object-cover shadow-sm" />
+              )
+            )}
+          </div>
+        </section>
+      )}
 
       {/* Solutions */}
       <section className="bg-slate-50 py-16">
