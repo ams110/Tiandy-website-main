@@ -150,10 +150,20 @@ export default function Home() {
               <Link
                 key={c.id}
                 to={`/products?cat=${c.slug}`}
-                className="group rounded-xl border border-slate-200 p-4 text-center transition hover:border-brand-400 hover:bg-brand-50"
+                className="group overflow-hidden rounded-xl border border-slate-200 text-center transition hover:border-brand-400 hover:shadow-md"
               >
-                <div className="text-2xl">📷</div>
-                <div className="mt-2 text-sm font-medium text-slate-700 group-hover:text-brand-600">
+                <div className="h-28 overflow-hidden bg-slate-100">
+                  {c.image_url ? (
+                    <img
+                      src={c.image_url}
+                      alt={c.name_he}
+                      className="h-full w-full object-contain p-2 transition duration-300 group-hover:scale-105"
+                    />
+                  ) : (
+                    <div className="flex h-full items-center justify-center text-3xl">📷</div>
+                  )}
+                </div>
+                <div className="px-2 py-2 text-sm font-medium text-slate-700 group-hover:text-brand-600">
                   {c.name_he}
                 </div>
               </Link>
