@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import SectionTitle from '../components/SectionTitle'
-import { site } from '../data/content'
+import { site, telHref, mailHref } from '../data/content'
 
 export default function Contact() {
   const [sent, setSent] = useState(false)
@@ -24,8 +24,8 @@ export default function Contact() {
           <div className="card p-6">
             <h3 className="font-bold text-slate-900">פרטי התקשרות</h3>
             <ul className="mt-4 space-y-3 text-sm text-slate-600">
-              <li>📞 טלפון: {site.phone}</li>
-              <li>✉️ דוא״ל: {site.email}</li>
+              <li>📞 טלפון: <a href={telHref} className="font-medium text-brand-600 hover:underline">{site.phone}</a></li>
+              <li>✉️ דוא״ל: <a href={mailHref} className="font-medium text-brand-600 hover:underline">{site.email}</a></li>
               <li>📍 כתובת: {site.address}</li>
               <li>🕘 שעות פעילות: א׳–ה׳, 09:00–17:00</li>
             </ul>

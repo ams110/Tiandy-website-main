@@ -107,7 +107,7 @@ export default function Home() {
           style={{ backgroundImage: `url('${heroImageUrl}')` }}
         />
         <div className="absolute inset-0 bg-gradient-to-l from-brand-900/95 via-brand-900/80 to-brand-800/40" />
-        <div className="container relative py-24 md:py-32">
+        <div className="container relative py-16 md:py-32">
           <div className="max-w-2xl">
             <h1 className="text-4xl font-extrabold leading-tight md:text-6xl">{heroTitle}</h1>
             <p className="mt-5 max-w-lg text-lg text-brand-100">{heroSubtitle}</p>

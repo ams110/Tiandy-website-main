@@ -8,6 +8,11 @@ export const site = {
   address: 'אזור התעשייה, תל אביב, ישראל',
 }
 
+// Click-to-call / click-to-email hrefs (important on mobile).
+// Strips spaces/dashes from the phone so `tel:` dials correctly.
+export const telHref = `tel:${site.phone.replace(/[^\d+]/g, '')}`
+export const mailHref = `mailto:${site.email}`
+
 export const nav = [
   { to: '/', label: 'דף הבית' },
   { to: '/products', label: 'מוצרים' },

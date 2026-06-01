@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom'
-import { nav, site } from '../data/content'
+import { nav, site, telHref, mailHref } from '../data/content'
 import Logo from './Logo'
 
 export default function Footer() {
@@ -27,8 +27,8 @@ export default function Footer() {
         <div>
           <h4 className="mb-3 text-sm font-bold text-slate-800">יצירת קשר</h4>
           <ul className="space-y-2 text-sm text-slate-600">
-            <li>טלפון: {site.phone}</li>
-            <li>דוא״ל: {site.email}</li>
+            <li>טלפון: <a href={telHref} className="hover:text-brand-600">{site.phone}</a></li>
+            <li>דוא״ל: <a href={mailHref} className="hover:text-brand-600">{site.email}</a></li>
             <li>{site.address}</li>
           </ul>
         </div>

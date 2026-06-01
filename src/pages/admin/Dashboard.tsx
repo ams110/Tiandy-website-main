@@ -317,23 +317,23 @@ export default function Dashboard() {
     <div className="min-h-screen bg-slate-50">
       {/* Top bar */}
       <header className="border-b border-slate-200 bg-white">
-        <div className="container flex h-16 items-center justify-between">
-          <div className="flex items-center gap-3">
-            <Logo variant="color" className="h-8 w-auto" />
-            <span className="text-sm font-bold text-slate-700">לוח ניהול</span>
+        <div className="container flex h-16 items-center justify-between gap-2">
+          <div className="flex min-w-0 items-center gap-2 sm:gap-3">
+            <Logo variant="color" className="h-8 w-auto shrink-0" />
+            <span className="hidden text-sm font-bold text-slate-700 sm:inline">לוח ניהול</span>
           </div>
-          <div className="flex items-center gap-2">
-            <Link to="/" className="btn-ghost text-sm">לאתר</Link>
-            <button onClick={signOut} className="btn-outline text-sm">יציאה</button>
+          <div className="flex shrink-0 items-center gap-2">
+            <Link to="/" className="btn-ghost px-3 text-sm">לאתר</Link>
+            <button onClick={signOut} className="btn-outline px-3 text-sm">יציאה</button>
           </div>
         </div>
         {/* Tabs */}
-        <div className="container flex gap-6 border-t border-slate-100">
+        <div className="container flex gap-4 overflow-x-auto border-t border-slate-100 sm:gap-6">
           {(['products', 'banners', 'settings'] as const).map((t) => (
             <button
               key={t}
               onClick={() => setTab(t)}
-              className={`py-3 text-sm font-medium border-b-2 transition ${
+              className={`whitespace-nowrap py-3 text-sm font-medium border-b-2 transition ${
                 tab === t
                   ? 'border-brand-500 text-brand-600'
                   : 'border-transparent text-slate-500 hover:text-slate-700'
