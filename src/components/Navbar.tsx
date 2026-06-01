@@ -41,7 +41,7 @@ export default function Navbar() {
       <div className="border-b border-slate-200 bg-white/95 backdrop-blur">
         <div className="container flex h-16 items-center justify-between">
           <Link to="/" className="flex items-center gap-2">
-            <Logo variant="color" className="h-9 w-auto" />
+            <Logo variant="color" />
           </Link>
 
           <nav className="hidden items-center gap-1 md:flex">

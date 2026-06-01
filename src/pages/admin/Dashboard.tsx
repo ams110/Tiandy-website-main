@@ -321,7 +321,7 @@ export default function Dashboard() {
       <header className="border-b border-slate-200 bg-white">
         <div className="container flex h-16 items-center justify-between gap-2">
           <div className="flex min-w-0 items-center gap-2 sm:gap-3">
-            <Logo variant="color" className="h-8 w-auto shrink-0" />
+            <Logo variant="color" />
             <span className="hidden text-sm font-bold text-slate-700 sm:inline">לוח ניהול</span>
           </div>
           <div className="flex shrink-0 items-center gap-2">

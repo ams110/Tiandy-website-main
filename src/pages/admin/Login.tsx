@@ -30,7 +30,7 @@ export default function Login() {
     <div className="flex min-h-screen items-center justify-center bg-slate-50 px-4">
       <div className="w-full max-w-sm rounded-2xl border border-slate-200 bg-white p-8 shadow-sm">
         <div className="mb-6 text-center">
-          <Logo variant="color" className="mx-auto h-10 w-auto" />
+          <Logo variant="color" />
           <h1 className="mt-4 text-xl font-bold text-slate-900">כניסת מנהל</h1>
           <p className="mt-1 text-sm text-slate-500">ניהול קטלוג המוצרים</p>
         </div>

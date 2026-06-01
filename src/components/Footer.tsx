@@ -7,7 +7,7 @@ export default function Footer() {
     <footer className="mt-20 border-t border-slate-200 bg-slate-50">
       <div className="container grid gap-8 py-12 md:grid-cols-4">
         <div>
-          <Logo variant="color" className="h-9 w-auto" />
+          <Logo variant="color" />
           <p className="mt-3 text-sm text-slate-600">{site.tagline}</p>
         </div>
 
