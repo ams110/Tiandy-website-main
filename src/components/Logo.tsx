@@ -2,7 +2,6 @@ export default function Logo({
   variant = 'color',
 }: {
   variant?: 'color' | 'white'
-  className?: string
 }) {
   const mainColor = variant === 'white' ? '#ffffff' : '#42d229'
 
