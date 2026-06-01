@@ -10,6 +10,20 @@ html {
   scroll-behavior: smooth;
 }
 
+/* Respect users who prefer reduced motion (WCAG 2.2 / accessibility) */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
 body {
   @apply bg-white text-slate-800 antialiased;
   font-family: 'Heebo', 'Rubik', system-ui, sans-serif;

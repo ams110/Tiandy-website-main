@@ -32,6 +32,7 @@ const emptyForm: ProductInput = {
   short_desc_he: '',
   description_he: '',
   image_url: '',
+  datasheet_url: '',
   specs: {},
   is_featured: false,
   sort: 0,
@@ -256,6 +257,7 @@ export default function Dashboard() {
       short_desc_he: p.short_desc_he ?? '',
       description_he: p.description_he ?? '',
       image_url: p.image_url ?? '',
+      datasheet_url: p.datasheet_url ?? '',
       specs: p.specs ?? {},
       is_featured: p.is_featured,
       sort: p.sort,
@@ -827,6 +829,17 @@ export default function Dashboard() {
                     />
                   </div>
                 </div>
+              </div>
+
+              <div>
+                <label className="label">דף נתונים / Datasheet (קישור PDF)</label>
+                <input
+                  dir="ltr"
+                  className="field text-left text-xs"
+                  placeholder="https://…/datasheet.pdf"
+                  value={form.datasheet_url ?? ''}
+                  onChange={(e) => setForm({ ...form, datasheet_url: e.target.value })}
+                />
               </div>
 
               <div>

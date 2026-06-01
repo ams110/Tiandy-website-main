@@ -97,7 +97,7 @@ export default function Navbar() {
           </nav>
 
           <div className="hidden md:block">
-            <Link to="/contact" className="btn-primary">
+            <Link to="/quote" className="btn-primary">
               בקשת הצעת מחיר
             </Link>
           </div>
@@ -189,7 +189,7 @@ export default function Navbar() {
               ),
             )}
 
-            <Link to="/contact" onClick={closeMenu} className="btn-primary mt-2">
+            <Link to="/quote" onClick={closeMenu} className="btn-primary mt-2">
               בקשת הצעת מחיר
             </Link>
 

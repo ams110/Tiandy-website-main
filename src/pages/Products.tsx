@@ -2,6 +2,8 @@ import { useEffect, useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
 import SectionTitle from '../components/SectionTitle'
 import ProductCard from '../components/ProductCard'
+import Seo from '../components/Seo'
+import { breadcrumbLd } from '../lib/seo'
 import { getCategories, getProducts } from '../lib/api'
 import type { Category, Product } from '../lib/types'
 
@@ -30,6 +32,15 @@ export default function Products() {
 
   return (
     <div className="container py-12">
+      <Seo
+        title="מוצרים"
+        description="קטלוג מצלמות רשת, מקליטי NVR, מצלמות PTZ ופתרונות אבטחה — סינון לפי קטגוריה."
+        path="/products"
+        jsonLd={breadcrumbLd([
+          { name: 'דף הבית', path: '/' },
+          { name: 'מוצרים', path: '/products' },
+        ])}
+      />
       <SectionTitle
         eyebrow="קטלוג"
         title="המוצרים שלנו"

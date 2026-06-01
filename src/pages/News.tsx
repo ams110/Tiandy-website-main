@@ -1,9 +1,20 @@
 import SectionTitle from '../components/SectionTitle'
+import Seo from '../components/Seo'
+import { breadcrumbLd } from '../lib/seo'
 import { news } from '../data/content'
 
 export default function News() {
   return (
     <div className="container py-12">
+      <Seo
+        title="חדשות ומאמרים"
+        description="עדכונים, השקות מוצרים ומאמרים מקצועיים בתחום אבטחה ומעקב וידאו."
+        path="/news"
+        jsonLd={breadcrumbLd([
+          { name: 'דף הבית', path: '/' },
+          { name: 'חדשות', path: '/news' },
+        ])}
+      />
       <SectionTitle
         eyebrow="עדכונים"
         title="חדשות ומאמרים"
