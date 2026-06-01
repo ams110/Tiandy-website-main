@@ -1,5 +1,5 @@
 import { supabase } from './supabase'
-import type { Banner, Category, Product } from './types'
+import type { Banner, Category, Lead, Product } from './types'
 
 const MEDIA_BUCKET = 'tiandy-il-media'
 
@@ -175,6 +175,16 @@ export type LeadInput = {
   message?: string | null
   type?: 'contact' | 'rfq'
   meta?: Record<string, unknown> | null
+}
+
+// Admin: list submitted leads (newest first). Requires an authenticated session.
+export async function getLeads(): Promise<Lead[]> {
+  const { data, error } = await supabase
+    .from('tiandy_il_leads')
+    .select('*')
+    .order('created_at', { ascending: false })
+  if (error) throw error
+  return (data ?? []) as Lead[]
 }
 
 // Stores a lead in Supabase. Throws on failure so the UI can fall back to mailto.

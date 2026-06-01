@@ -1,5 +1,17 @@
 export type SiteSettings = Record<string, string>
 
+export interface Lead {
+  id: string
+  name: string
+  email: string
+  phone: string | null
+  company: string | null
+  message: string | null
+  type: 'contact' | 'rfq'
+  meta: Record<string, unknown> | null
+  created_at: string
+}
+
 export interface Banner {
   id: string
   image_url: string

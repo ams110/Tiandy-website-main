@@ -18,10 +18,11 @@ import {
   createBanner,
   updateBanner,
   deleteBanner,
+  getLeads,
   type ProductInput,
   type BannerInput,
 } from '../../lib/api'
-import type { Banner, Category, Product, SiteSettings } from '../../lib/types'
+import type { Banner, Category, Lead, Product, SiteSettings } from '../../lib/types'
 
 type BulkResult = { file: string; status: 'ok' | 'error' | 'notfound'; message?: string }
 
@@ -55,7 +56,12 @@ const emptyBannerForm: BannerInput = {
 
 export default function Dashboard() {
   const { signOut } = useAuth()
-  const [tab, setTab] = useState<'products' | 'settings' | 'banners'>('products')
+  const [tab, setTab] = useState<'products' | 'settings' | 'banners' | 'leads'>('products')
+
+  // ── Leads state ──
+  const [leads, setLeads] = useState<Lead[]>([])
+  const [leadsLoading, setLeadsLoading] = useState(false)
+  const [leadFilter, setLeadFilter] = useState<'all' | 'contact' | 'rfq'>('all')
 
   // ── Products state ──
   const [products, setProducts] = useState<Product[]>([])
@@ -234,11 +240,24 @@ export default function Dashboard() {
     }
   }
 
+  async function loadLeads() {
+    setLeadsLoading(true)
+    try { setLeads(await getLeads()) }
+    catch (e) { console.error(e) }
+    finally { setLeadsLoading(false) }
+  }
+
   useEffect(() => {
     load()
     loadSettings()
     loadBanners()
   }, [])
+
+  // Load leads lazily the first time the tab is opened.
+  useEffect(() => {
+    if (tab === 'leads' && leads.length === 0) loadLeads()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [tab])
 
   function openCreate() {
     setEditing(null)
@@ -331,7 +350,7 @@ export default function Dashboard() {
         </div>
         {/* Tabs */}
         <div className="container flex gap-4 overflow-x-auto border-t border-slate-100 sm:gap-6">
-          {(['products', 'banners', 'settings'] as const).map((t) => (
+          {(['products', 'banners', 'leads', 'settings'] as const).map((t) => (
             <button
               key={t}
               onClick={() => setTab(t)}
@@ -341,7 +360,13 @@ export default function Dashboard() {
                   : 'border-transparent text-slate-500 hover:text-slate-700'
               }`}
             >
-              {t === 'products' ? 'ניהול מוצרים' : t === 'banners' ? 'ניהול באנרים' : 'הגדרות האתר'}
+              {t === 'products'
+                ? 'ניהול מוצרים'
+                : t === 'banners'
+                ? 'ניהול באנרים'
+                : t === 'leads'
+                ? 'פניות ולידים'
+                : 'הגדרות האתר'}
             </button>
           ))}
         </div>
@@ -569,6 +594,82 @@ export default function Dashboard() {
                 </button>
               </div>
             </form>
+          </div>
+        )}
+
+        {/* ── Leads tab ── */}
+        {tab === 'leads' && (
+          <div>
+            <div className="mb-6 flex flex-wrap items-center justify-between gap-3">
+              <div>
+                <h1 className="text-2xl font-extrabold text-slate-900">פניות ולידים</h1>
+                <p className="text-sm text-slate-500">
+                  סה״כ {leads.length} פניות · {leads.filter((l) => l.type === 'rfq').length} בקשות הצעת מחיר
+                </p>
+              </div>
+              <div className="flex items-center gap-2">
+                {(['all', 'contact', 'rfq'] as const).map((f) => (
+                  <button
+                    key={f}
+                    onClick={() => setLeadFilter(f)}
+                    className={`rounded-full px-3 py-1.5 text-sm font-medium transition ${
+                      leadFilter === f ? 'bg-brand-500 text-white' : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
+                    }`}
+                  >
+                    {f === 'all' ? 'הכל' : f === 'contact' ? 'צור קשר' : 'הצעת מחיר'}
+                  </button>
+                ))}
+                <button onClick={loadLeads} className="btn-ghost text-sm" title="רענון">↻</button>
+              </div>
+            </div>
+
+            {leadsLoading ? (
+              <p className="text-slate-500">טוען…</p>
+            ) : (() => {
+              const rows = leads.filter((l) => leadFilter === 'all' || l.type === leadFilter)
+              if (rows.length === 0)
+                return <p className="rounded-xl border border-slate-200 bg-white p-6 text-slate-500">אין פניות להצגה.</p>
+              return (
+                <div className="space-y-3">
+                  {rows.map((l) => (
+                    <div key={l.id} className="card p-4">
+                      <div className="flex flex-wrap items-start justify-between gap-2">
+                        <div className="min-w-0">
+                          <div className="flex items-center gap-2">
+                            <span className="font-bold text-slate-800">{l.name}</span>
+                            <span className={`rounded-full px-2 py-0.5 text-xs ${
+                              l.type === 'rfq' ? 'bg-amber-100 text-amber-700' : 'bg-slate-100 text-slate-600'
+                            }`}>
+                              {l.type === 'rfq' ? 'הצעת מחיר' : 'צור קשר'}
+                            </span>
+                          </div>
+                          <div className="mt-1 flex flex-wrap gap-x-4 gap-y-1 text-sm text-slate-500">
+                            <a href={`mailto:${l.email}`} dir="ltr" className="hover:text-brand-600">{l.email}</a>
+                            {l.phone && <a href={`tel:${l.phone}`} dir="ltr" className="hover:text-brand-600">{l.phone}</a>}
+                            {l.company && <span>🏢 {l.company}</span>}
+                          </div>
+                        </div>
+                        <time className="shrink-0 text-xs text-slate-400" dir="ltr">
+                          {new Date(l.created_at).toLocaleString('he-IL')}
+                        </time>
+                      </div>
+                      {l.message && <p className="mt-2 whitespace-pre-wrap text-sm text-slate-700">{l.message}</p>}
+                      {l.meta && Object.keys(l.meta).length > 0 && (
+                        <div className="mt-2 flex flex-wrap gap-2 text-xs text-slate-500">
+                          {Object.entries(l.meta).map(([k, v]) =>
+                            v ? (
+                              <span key={k} className="rounded bg-slate-100 px-2 py-0.5">
+                                {k}: {String(v)}
+                              </span>
+                            ) : null,
+                          )}
+                        </div>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              )
+            })()}
           </div>
         )}
 
