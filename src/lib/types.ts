@@ -16,6 +16,7 @@ export interface Category {
   slug: string
   name_he: string
   description_he: string | null
+  image_url: string | null
   sort: number
   created_at: string
 }
