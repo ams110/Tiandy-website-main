@@ -1,9 +1,20 @@
 import SectionTitle from '../components/SectionTitle'
+import Seo from '../components/Seo'
+import { breadcrumbLd } from '../lib/seo'
 import { solutions } from '../data/content'
 
 export default function Solutions() {
   return (
     <div className="container py-12">
+      <Seo
+        title="פתרונות"
+        description="פתרונות אבטחה מותאמים לכל ענף — קמעונאות, עיר חכמה, תעשייה, בנקאות, חינוך ותחבורה."
+        path="/solutions"
+        jsonLd={breadcrumbLd([
+          { name: 'דף הבית', path: '/' },
+          { name: 'פתרונות', path: '/solutions' },
+        ])}
+      />
       <SectionTitle
         eyebrow="פתרונות"
         title="פתרונות מותאמים לכל ענף"

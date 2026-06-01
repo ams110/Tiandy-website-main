@@ -1,5 +1,7 @@
 import { useEffect, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
+import Seo from '../components/Seo'
+import { breadcrumbLd, productLd } from '../lib/seo'
 import { getProductBySlug } from '../lib/api'
 import type { Product } from '../lib/types'
 
@@ -32,6 +34,20 @@ export default function ProductDetail() {
 
   return (
     <div className="container py-12">
+      <Seo
+        title={product.name_he}
+        description={product.short_desc_he ?? product.description_he ?? undefined}
+        path={`/products/${product.slug}`}
+        image={product.image_url ?? undefined}
+        jsonLd={[
+          productLd(product),
+          breadcrumbLd([
+            { name: 'דף הבית', path: '/' },
+            { name: 'מוצרים', path: '/products' },
+            { name: product.name_he, path: `/products/${product.slug}` },
+          ]),
+        ]}
+      />
       <nav className="mb-6 text-sm text-slate-500">
         <Link to="/" className="hover:text-brand-600">דף הבית</Link> ·{' '}
         <Link to="/products" className="hover:text-brand-600">מוצרים</Link> ·{' '}
@@ -41,7 +57,13 @@ export default function ProductDetail() {
       <div className="grid gap-10 lg:grid-cols-2">
         <div className="overflow-hidden rounded-2xl border border-slate-200 bg-slate-100">
           {product.image_url && (
-            <img src={product.image_url} alt={product.name_he} className="w-full object-cover" />
+            <img
+              src={product.image_url}
+              alt={product.name_he}
+              width={800}
+              height={600}
+              className="aspect-[4/3] w-full object-cover"
+            />
           )}
         </div>
 
@@ -73,9 +95,21 @@ export default function ProductDetail() {
             </div>
           )}
 
-          <Link to="/contact" className="btn-primary mt-8">
-            בקשת הצעת מחיר
-          </Link>
+          <div className="mt-8 flex flex-wrap gap-3">
+            <Link to={`/quote?product=${product.slug}`} className="btn-primary">
+              בקשת הצעת מחיר
+            </Link>
+            {product.datasheet_url && (
+              <a
+                href={product.datasheet_url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="btn-outline"
+              >
+                ⬇ הורדת דף נתונים (PDF)
+              </a>
+            )}
+          </div>
         </div>
       </div>
     </div>

@@ -28,6 +28,7 @@ export interface Product {
   short_desc_he: string | null
   description_he: string | null
   image_url: string | null
+  datasheet_url: string | null
   specs: Record<string, unknown>
   is_featured: boolean
   sort: number

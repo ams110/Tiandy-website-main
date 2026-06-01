@@ -8,4 +8,9 @@ if (!url || !anonKey) {
   console.warn('Supabase env vars are missing. Copy .env.example to .env and fill them in.')
 }
 
-export const supabase = createClient(url, anonKey)
+// Fallbacks keep createClient from throwing during the static prerender (SSG),
+// where env vars may be absent and no network calls are made anyway.
+export const supabase = createClient(
+  url || 'https://placeholder.supabase.co',
+  anonKey || 'placeholder-anon-key',
+)

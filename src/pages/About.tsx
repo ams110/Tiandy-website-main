@@ -1,9 +1,20 @@
 import SectionTitle from '../components/SectionTitle'
+import Seo from '../components/Seo'
+import { breadcrumbLd } from '../lib/seo'
 import { about, stats } from '../data/content'
 
 export default function About() {
   return (
     <div className="container py-12">
+      <Seo
+        title="אודות"
+        description={about.intro}
+        path="/about"
+        jsonLd={breadcrumbLd([
+          { name: 'דף הבית', path: '/' },
+          { name: 'אודות', path: '/about' },
+        ])}
+      />
       <SectionTitle eyebrow="מי אנחנו" title={about.title} subtitle={about.intro} />
 
       <div className="mt-8 grid gap-10 lg:grid-cols-2">
@@ -15,7 +26,10 @@ export default function About() {
         <img
           src="https://images.unsplash.com/photo-1497366216548-37526070297c?w=900&q=80"
           alt="צוות החברה"
-          className="rounded-2xl shadow-lg"
+          width={900}
+          height={600}
+          loading="lazy"
+          className="aspect-[3/2] w-full rounded-2xl object-cover shadow-lg"
         />
       </div>
 

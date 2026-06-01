@@ -165,6 +165,32 @@ export async function destroyProduct(id: string): Promise<void> {
   if (error) throw error
 }
 
+// ---- Leads (contact + request-for-quote) ----
+
+export type LeadInput = {
+  name: string
+  email: string
+  phone?: string | null
+  company?: string | null
+  message?: string | null
+  type?: 'contact' | 'rfq'
+  meta?: Record<string, unknown> | null
+}
+
+// Stores a lead in Supabase. Throws on failure so the UI can fall back to mailto.
+export async function submitLead(input: LeadInput): Promise<void> {
+  const { error } = await supabase.from('tiandy_il_leads').insert({
+    name: input.name,
+    email: input.email,
+    phone: input.phone ?? null,
+    company: input.company ?? null,
+    message: input.message ?? null,
+    type: input.type ?? 'contact',
+    meta: input.meta ?? null,
+  })
+  if (error) throw error
+}
+
 // ---- Banners ----
 
 export async function getBanners(): Promise<Banner[]> {

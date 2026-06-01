@@ -2,9 +2,12 @@ import { useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 import SectionTitle from '../components/SectionTitle'
 import ProductCard from '../components/ProductCard'
+import TrustBar from '../components/TrustBar'
+import Seo from '../components/Seo'
+import { organizationLd } from '../lib/seo'
 import { getFeaturedProducts, getCategories, getSettings, getBanners } from '../lib/api'
 import type { Banner, Product, Category, SiteSettings } from '../lib/types'
-import { hero as heroDefaults, stats, solutions } from '../data/content'
+import { hero as heroDefaults, stats, solutions, caseStudies } from '../data/content'
 
 function BannerSlider({ banners }: { banners: Banner[] }) {
   const [cur, setCur] = useState(0)
@@ -100,6 +103,13 @@ export default function Home() {
 
   return (
     <>
+      <Seo
+        title="Tiandy ישראל | פתרונות אבטחה ומעקב וידאו"
+        description="פתרונות אבטחה ומצלמות מתקדמים לשוק הישראלי — מצלמות רשת, NVR, בקרת כניסה ואנליטיקת וידאו מבוססת בינה מלאכותית."
+        path="/"
+        jsonLd={organizationLd()}
+      />
+
       {/* Hero banner */}
       <section className="relative overflow-hidden bg-brand-900 text-white">
         <div
@@ -107,7 +117,7 @@ export default function Home() {
           style={{ backgroundImage: `url('${heroImageUrl}')` }}
         />
         <div className="absolute inset-0 bg-gradient-to-l from-brand-900/95 via-brand-900/80 to-brand-800/40" />
-        <div className="container relative py-24 md:py-32">
+        <div className="container relative py-16 md:py-32">
           <div className="max-w-2xl">
             <h1 className="text-4xl font-extrabold leading-tight md:text-6xl">{heroTitle}</h1>
             <p className="mt-5 max-w-lg text-lg text-brand-100">{heroSubtitle}</p>
@@ -151,6 +161,9 @@ export default function Home() {
           </div>
         </div>
       </section>
+
+      {/* Trust signals */}
+      <TrustBar />
 
       {/* Stats */}
       <section className="bg-brand-700 text-white">
@@ -248,6 +261,32 @@ export default function Home() {
         </div>
       </section>
 
+      {/* Case studies */}
+      <section className="bg-slate-50 py-16">
+        <div className="container">
+          <SectionTitle
+            center
+            eyebrow="סיפורי הצלחה"
+            title="פרויקטים נבחרים"
+            subtitle="תוצאות מדידות מפריסות אמיתיות בשטח."
+          />
+          <div className="mt-10 grid gap-6 md:grid-cols-3">
+            {caseStudies.map((cs) => (
+              <div key={cs.slug} className="card flex flex-col p-6">
+                <span className="text-xs font-bold uppercase tracking-wide text-brand-500">
+                  {cs.industry}
+                </span>
+                <h3 className="mt-2 text-lg font-bold text-slate-900">{cs.title}</h3>
+                <p className="mt-2 flex-1 text-sm text-slate-600">{cs.desc}</p>
+                <p className="mt-4 rounded-lg bg-brand-50 px-3 py-2 text-sm font-bold text-brand-700">
+                  {cs.metric}
+                </p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* CTA */}
       <section className="bg-brand-800">
         <div className="container py-16 text-center text-white">
@@ -255,9 +294,14 @@ export default function Home() {
           <p className="mx-auto mt-3 max-w-xl text-brand-100">
             צוות המומחים שלנו ישמח לבנות עבורכם מערכת מותאמת אישית.
           </p>
-          <Link to="/contact" className="btn mt-6 bg-accent-500 text-white hover:bg-accent-400">
-            לקבלת ייעוץ חינם
-          </Link>
+          <div className="mt-6 flex flex-wrap justify-center gap-3">
+            <Link to="/quote" className="btn bg-accent-500 text-white hover:bg-accent-400">
+              בקשת הצעת מחיר
+            </Link>
+            <Link to="/contact" className="btn border border-white/60 text-white hover:bg-white/10">
+              לקבלת ייעוץ חינם
+            </Link>
+          </div>
         </div>
       </section>
     </>
