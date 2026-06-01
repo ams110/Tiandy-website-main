@@ -1,4 +1,4 @@
-import { Helmet } from 'react-helmet-async'
+import { Head } from 'vite-react-ssg'
 import { canonical } from '../lib/seo'
 import { SITE_URL, site } from '../data/content'
 
@@ -29,7 +29,7 @@ export default function Seo({
   const blocks = jsonLd ? (Array.isArray(jsonLd) ? jsonLd : [jsonLd]) : []
 
   return (
-    <Helmet>
+    <Head>
       <title>{fullTitle}</title>
       <meta name="description" content={description} />
       <link rel="canonical" href={url} />
@@ -52,6 +52,6 @@ export default function Seo({
           {JSON.stringify(block)}
         </script>
       ))}
-    </Helmet>
+    </Head>
   )
 }
