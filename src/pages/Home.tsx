@@ -111,25 +111,19 @@ export default function Home() {
       />
 
       {/* Hero banner */}
-      <section className="relative overflow-hidden bg-brand-900 text-white">
+      <section className="relative overflow-hidden bg-slate-900 text-white">
         <div
-          className="absolute inset-0 bg-cover bg-center opacity-30"
+          className="absolute inset-0 bg-cover bg-center opacity-50"
           style={{ backgroundImage: `url('${heroImageUrl}')` }}
         />
-        <div className="absolute inset-0 bg-gradient-to-l from-brand-900/95 via-brand-900/80 to-brand-800/40" />
-        <div className="container relative py-16 md:py-32">
-          <div className="max-w-2xl">
-            <h1 className="text-4xl font-extrabold leading-tight md:text-6xl">{heroTitle}</h1>
-            <p className="mt-5 max-w-lg text-lg text-brand-100">{heroSubtitle}</p>
-            <div className="mt-8 flex flex-wrap gap-3">
+        <div className="absolute inset-0 bg-gradient-to-l from-slate-900/90 via-slate-900/60 to-slate-900/20" />
+        <div className="container relative py-12 md:py-20">
+          <div className="max-w-xl">
+            <h1 className="text-3xl font-extrabold leading-tight md:text-5xl">{heroTitle}</h1>
+            <p className="mt-4 max-w-lg text-base text-slate-200">{heroSubtitle}</p>
+            <div className="mt-6">
               <Link to={heroDefaults.primaryCta.to} className="btn bg-accent-500 text-white hover:bg-accent-400">
                 {heroDefaults.primaryCta.label}
-              </Link>
-              <Link
-                to={heroDefaults.secondaryCta.to}
-                className="btn border border-white/60 text-white hover:bg-white/10"
-              >
-                {heroDefaults.secondaryCta.label}
               </Link>
             </div>
           </div>
