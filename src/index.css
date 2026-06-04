@@ -60,14 +60,25 @@ body {
   88%  { opacity: 1; }
   100% { top: 94%; opacity: 0; }
 }
-@keyframes tdy-float {
-  0%, 100% { transform: translateY(0); }
-  50%      { transform: translateY(-7px); }
+/* Detection boxes travel along the traffic flow so they read as tracking
+   moving vehicles rather than floating in fixed spots. */
+@keyframes tdy-track-a {
+  0%   { transform: translate(0, 0);        opacity: 0; }
+  10%  { opacity: 1; }
+  85%  { opacity: 1; }
+  100% { transform: translate(54vw, -5vh);  opacity: 0; }
+}
+@keyframes tdy-track-b {
+  0%   { transform: translate(0, 0);        opacity: 0; }
+  12%  { opacity: 1; }
+  82%  { opacity: 1; }
+  100% { transform: translate(46vw, 17vh);  opacity: 0; }
 }
 @keyframes tdy-dot {
   0%, 100% { opacity: 0.35; }
   50%      { opacity: 1; }
 }
 .tdy-scanline { animation: tdy-scan 3.6s ease-in-out infinite; }
-.tdy-box      { animation: tdy-float 6s ease-in-out infinite; }
+.tdy-trk-a    { animation: tdy-track-a 7.5s linear infinite; }
+.tdy-trk-b    { animation: tdy-track-b 9.5s linear infinite; }
 .tdy-dot      { animation: tdy-dot 1.3s ease-in-out infinite; }
