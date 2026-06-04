@@ -15,7 +15,7 @@ export const mailHref = `mailto:${site.email}`
 
 // Public production URL — used for canonical links, sitemap and Open Graph.
 // Update this if the site moves to a custom domain.
-export const SITE_URL = 'https://ams110.github.io/Tiandy'
+export const SITE_URL = 'https://ams110.github.io/Tiandy-website-main'
 
 // Trust signals — industry certifications / compliance shown across the site.
 // Replace the emoji with real badge images in /public when available.
