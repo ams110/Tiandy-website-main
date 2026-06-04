@@ -180,27 +180,28 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Featured products */}
-      <section className="container py-24">
-        <SectionTitle
-          eyebrow="המוצרים שלנו"
-          title="מוצרים נבחרים"
-          subtitle="מבחר פתרונות מובילים למעקב ואבטחה."
-        />
-        <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-          {featured.map((p) => (
-            <ProductCard key={p.id} product={p} />
-          ))}
-          {featured.length === 0 && (
-            <p className="text-slate-500">לא נמצאו מוצרים נבחרים כרגע.</p>
-          )}
-        </div>
-        <div className="mt-8 text-center">
-          <Link to="/products" className="btn-outline">
-            לכל המוצרים
-          </Link>
-        </div>
-      </section>
+      {/* Featured products — only rendered when there are featured items, so the
+          homepage never shows an empty section. Flag products as "מובלט" in the
+          admin to populate it. */}
+      {featured.length > 0 && (
+        <section className="container py-24">
+          <SectionTitle
+            eyebrow="המוצרים שלנו"
+            title="מוצרים נבחרים"
+            subtitle="מבחר פתרונות מובילים למעקב ואבטחה."
+          />
+          <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+            {featured.map((p) => (
+              <ProductCard key={p.id} product={p} />
+            ))}
+          </div>
+          <div className="mt-10 text-center">
+            <Link to="/products" className="btn-outline">
+              לכל המוצרים
+            </Link>
+          </div>
+        </section>
+      )}
 
       {/* Mid-page promotional banner */}
       {midBanners.length > 0 && (

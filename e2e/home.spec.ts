@@ -38,8 +38,10 @@ test.describe('homepage', () => {
     await expect(page).toHaveURL(/\/solutions$/)
   })
 
-  test('featured products show a friendly empty state without a backend', async ({ page }) => {
-    await expect(page.getByText('לא נמצאו מוצרים נבחרים כרגע.')).toBeVisible()
+  test('featured-products section is hidden when there are no featured items', async ({ page }) => {
+    // Without a backend there are no featured products, so the whole section
+    // (heading included) should not render — no empty block on the page.
+    await expect(page.getByRole('heading', { name: 'מוצרים נבחרים' })).toHaveCount(0)
   })
 
   test('closing CTA offers both quote and contact actions', async ({ page }) => {
