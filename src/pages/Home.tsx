@@ -86,12 +86,20 @@ export default function Home() {
   const [categories, setCategories] = useState<Category[]>([])
   const [settings, setSettings] = useState<SiteSettings>({})
   const [banners, setBanners] = useState<Banner[]>([])
+  const heroVideoRef = useRef<HTMLVideoElement>(null)
 
   useEffect(() => {
     getFeaturedProducts().then(setFeatured).catch((e) => console.error(e))
     getCategories().then(setCategories).catch((e) => console.error(e))
     getSettings().then(setSettings).catch((e) => console.error(e))
     getBanners().then(setBanners).catch((e) => console.error(e))
+  }, [])
+
+  // Pause the background video for visitors who prefer reduced motion.
+  useEffect(() => {
+    if (window.matchMedia?.('(prefers-reduced-motion: reduce)').matches) {
+      heroVideoRef.current?.pause()
+    }
   }, [])
 
   const heroBanners  = banners.filter((b) => b.position === 'hero')
@@ -113,10 +121,20 @@ export default function Home() {
 
       {/* Hero banner */}
       <section className="relative overflow-hidden bg-slate-900 text-white">
-        <div
-          className="absolute inset-0 bg-cover bg-center opacity-50"
-          style={{ backgroundImage: `url('${heroImageUrl}')` }}
-        />
+        {/* Background video (muted, looped). Falls back to the hero image as a
+            poster while it loads, on autoplay-blocked browsers, or if it fails.
+            Paused automatically for visitors who prefer reduced motion. */}
+        <video
+          ref={heroVideoRef}
+          autoPlay
+          muted
+          loop
+          playsInline
+          poster={heroImageUrl}
+          className="pointer-events-none absolute inset-0 h-full w-full object-cover opacity-50"
+        >
+          <source src={`${import.meta.env.BASE_URL}hero.mp4`} type="video/mp4" />
+        </video>
         <div className="absolute inset-0 bg-gradient-to-l from-slate-900/90 via-slate-900/60 to-slate-900/20" />
         {/* Animated AI-detection overlay (decorative) */}
         <HeroAIDetection />
