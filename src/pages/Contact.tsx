@@ -72,8 +72,9 @@ export default function Contact() {
           ) : (
             <form onSubmit={handleSubmit} className="space-y-4">
               <div>
-                <label className="label">שם מלא</label>
+                <label className="label" htmlFor="c-name">שם מלא</label>
                 <input
+                  id="c-name"
                   required
                   className="field"
                   placeholder="ישראל ישראלי"
@@ -83,8 +84,9 @@ export default function Contact() {
               </div>
               <div className="grid gap-4 sm:grid-cols-2">
                 <div>
-                  <label className="label">טלפון <span className="font-normal text-slate-400">(לא חובה)</span></label>
+                  <label className="label" htmlFor="c-phone">טלפון <span className="font-normal text-slate-400">(לא חובה)</span></label>
                   <input
+                    id="c-phone"
                     className="field"
                     placeholder="050-0000000"
                     value={form.phone}
@@ -92,8 +94,9 @@ export default function Contact() {
                   />
                 </div>
                 <div>
-                  <label className="label">דוא״ל</label>
+                  <label className="label" htmlFor="c-email">דוא״ל</label>
                   <input
+                    id="c-email"
                     type="email"
                     required
                     className="field"
@@ -104,8 +107,9 @@ export default function Contact() {
                 </div>
               </div>
               <div>
-                <label className="label">הודעה</label>
+                <label className="label" htmlFor="c-message">הודעה</label>
                 <textarea
+                  id="c-message"
                   required
                   rows={4}
                   className="field"

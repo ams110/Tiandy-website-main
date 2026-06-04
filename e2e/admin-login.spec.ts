@@ -1,4 +1,4 @@
-import { test, expect } from '@playwright/test'
+import { test, expect } from './fixtures'
 
 // Exercises the admin gate: the login form should render, reject bad
 // credentials with an error, and a protected route should not leak through.

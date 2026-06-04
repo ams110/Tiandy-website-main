@@ -1,4 +1,4 @@
-import { test, expect } from '@playwright/test'
+import { test, expect } from './fixtures'
 
 // Fills the Request-for-Quote form end-to-end like a real lead would, then
 // submits and checks the success state. Submission falls back to a mailto
@@ -26,6 +26,11 @@ test.describe('quote form', () => {
 
     // Success panel
     await expect(page.getByText('הבקשה התקבלה!')).toBeVisible()
+  })
+
+  test('a product passed in the URL pre-fills the message', async ({ page }) => {
+    await page.goto('/quote?product=ipc-2025')
+    await expect(page.getByLabel('פרטים נוספים')).toHaveValue('מתעניין במוצר: ipc-2025')
   })
 
   test('required fields block an empty submit', async ({ page }) => {

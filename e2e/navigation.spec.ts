@@ -1,4 +1,4 @@
-import { test, expect } from '@playwright/test'
+import { test, expect } from './fixtures'
 
 // Walks the public site like a visitor: lands on the homepage and clicks
 // through every main nav link, asserting the right page actually renders.
