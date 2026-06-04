@@ -85,8 +85,9 @@ export default function Quote() {
                 {/* Qualifying questions first */}
                 <div className="grid gap-4 sm:grid-cols-2">
                   <div>
-                    <label className="label">סוג הפרויקט</label>
+                    <label className="label" htmlFor="q-scope">סוג הפרויקט</label>
                     <select
+                      id="q-scope"
                       required
                       className="field"
                       value={form.scope}
@@ -100,8 +101,9 @@ export default function Quote() {
                     </select>
                   </div>
                   <div>
-                    <label className="label">מספר אתרים / מצלמות (משוער)</label>
+                    <label className="label" htmlFor="q-sites">מספר אתרים / מצלמות (משוער)</label>
                     <input
+                      id="q-sites"
                       className="field"
                       placeholder="לדוגמה: 3 אתרים, ~40 מצלמות"
                       value={form.sites}
@@ -112,8 +114,9 @@ export default function Quote() {
 
                 <div className="grid gap-4 sm:grid-cols-2">
                   <div>
-                    <label className="label">שם מלא</label>
+                    <label className="label" htmlFor="q-name">שם מלא</label>
                     <input
+                      id="q-name"
                       required
                       className="field"
                       value={form.name}
@@ -121,8 +124,9 @@ export default function Quote() {
                     />
                   </div>
                   <div>
-                    <label className="label">חברה <span className="font-normal text-slate-400">(לא חובה)</span></label>
+                    <label className="label" htmlFor="q-company">חברה <span className="font-normal text-slate-400">(לא חובה)</span></label>
                     <input
+                      id="q-company"
                       className="field"
                       value={form.company}
                       onChange={(e) => update('company', e.target.value)}
@@ -132,8 +136,9 @@ export default function Quote() {
 
                 <div className="grid gap-4 sm:grid-cols-2">
                   <div>
-                    <label className="label">דוא״ל</label>
+                    <label className="label" htmlFor="q-email">דוא״ל</label>
                     <input
+                      id="q-email"
                       type="email"
                       required
                       className="field"
@@ -142,8 +147,9 @@ export default function Quote() {
                     />
                   </div>
                   <div>
-                    <label className="label">טלפון <span className="font-normal text-slate-400">(לא חובה)</span></label>
+                    <label className="label" htmlFor="q-phone">טלפון <span className="font-normal text-slate-400">(לא חובה)</span></label>
                     <input
+                      id="q-phone"
                       className="field"
                       value={form.phone}
                       onChange={(e) => update('phone', e.target.value)}
@@ -152,8 +158,9 @@ export default function Quote() {
                 </div>
 
                 <div>
-                  <label className="label">פרטים נוספים</label>
+                  <label className="label" htmlFor="q-message">פרטים נוספים</label>
                   <textarea
+                    id="q-message"
                     rows={4}
                     className="field"
                     placeholder="תארו את הצרכים, סוג האתר, דרישות מיוחדות…"
