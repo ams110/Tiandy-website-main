@@ -31,10 +31,10 @@ function BannerSlider({ banners }: { banners: Banner[] }) {
         >
           {b.link_url ? (
             <a href={b.link_url} target="_blank" rel="noopener noreferrer" className="block h-full">
-              <img src={b.image_url} alt={b.title_he ?? ''} className="h-full w-full object-cover" />
+              <img src={b.image_url} alt={b.title_he ?? ''} className="h-full w-full object-contain" />
             </a>
           ) : (
-            <img src={b.image_url} alt={b.title_he ?? ''} className="h-full w-full object-cover" />
+            <img src={b.image_url} alt={b.title_he ?? ''} className="h-full w-full object-contain" />
           )}
           {b.title_he && (
             <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/60 to-transparent px-6 pb-4 pt-8 text-white">
