@@ -52,3 +52,22 @@ body {
     @apply mb-1 block text-sm font-medium text-slate-700;
   }
 }
+
+/* ── Hero "live AI detection" overlay animations (see HeroAIDetection.tsx) ── */
+@keyframes tdy-scan {
+  0%   { top: 4%;  opacity: 0; }
+  12%  { opacity: 1; }
+  88%  { opacity: 1; }
+  100% { top: 94%; opacity: 0; }
+}
+@keyframes tdy-float {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(-7px); }
+}
+@keyframes tdy-dot {
+  0%, 100% { opacity: 0.35; }
+  50%      { opacity: 1; }
+}
+.tdy-scanline { animation: tdy-scan 3.6s ease-in-out infinite; }
+.tdy-box      { animation: tdy-float 6s ease-in-out infinite; }
+.tdy-dot      { animation: tdy-dot 1.3s ease-in-out infinite; }

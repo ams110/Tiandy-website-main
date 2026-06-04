@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import SectionTitle from '../components/SectionTitle'
 import ProductCard from '../components/ProductCard'
 import TrustBar from '../components/TrustBar'
+import HeroAIDetection from '../components/HeroAIDetection'
 import Seo from '../components/Seo'
 import { organizationLd } from '../lib/seo'
 import { getFeaturedProducts, getCategories, getSettings, getBanners } from '../lib/api'
@@ -117,6 +118,8 @@ export default function Home() {
           style={{ backgroundImage: `url('${heroImageUrl}')` }}
         />
         <div className="absolute inset-0 bg-gradient-to-l from-slate-900/90 via-slate-900/60 to-slate-900/20" />
+        {/* Animated AI-detection overlay (decorative) */}
+        <HeroAIDetection />
         <div className="container relative py-12 md:py-20">
           <div className="max-w-xl">
             <h1 className="text-3xl font-extrabold leading-tight md:text-5xl">{heroTitle}</h1>

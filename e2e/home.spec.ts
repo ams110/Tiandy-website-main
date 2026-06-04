@@ -52,6 +52,14 @@ test.describe('homepage', () => {
     )
   })
 
+  test('hero renders the animated AI-detection overlay', async ({ page }) => {
+    // Decorative overlay (aria-hidden) — present and does not block the CTA.
+    await expect(page.getByTestId('hero-ai')).toBeAttached()
+    await expect(page.getByText(/AI.?LIVE/)).toBeVisible()
+    // It must never intercept the hero CTA (pointer-events: none).
+    await expect(page.getByRole('link', { name: 'לצפייה במוצרים' })).toBeVisible()
+  })
+
   test('the logo returns to the homepage', async ({ page }) => {
     await page.getByRole('link', { name: 'מוצרים' }).first().click()
     await expect(page).toHaveURL(/\/products$/)
