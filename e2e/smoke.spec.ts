@@ -22,7 +22,11 @@ for (const route of routes) {
     const errors: string[] = []
     page.on('pageerror', (err) => errors.push(err.message))
 
-    await page.goto(route, { waitUntil: 'networkidle' })
+    // Use 'load' rather than 'networkidle': the hero's looping background
+    // video keeps a media connection open, so the network never goes idle.
+    await page.goto(route, { waitUntil: 'load' })
+    // Give late-firing scripts a moment to surface any uncaught error.
+    await page.waitForTimeout(1000)
 
     // Something meaningful rendered (heading or the page body has text).
     await expect(page.locator('body')).not.toBeEmpty()
