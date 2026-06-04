@@ -86,7 +86,6 @@ export default function Home() {
   const [categories, setCategories] = useState<Category[]>([])
   const [settings, setSettings] = useState<SiteSettings>({})
   const [banners, setBanners] = useState<Banner[]>([])
-  const heroVideoRef = useRef<HTMLVideoElement>(null)
 
   useEffect(() => {
     getFeaturedProducts().then(setFeatured).catch((e) => console.error(e))
@@ -95,18 +94,10 @@ export default function Home() {
     getBanners().then(setBanners).catch((e) => console.error(e))
   }, [])
 
-  // Pause the background video for visitors who prefer reduced motion.
-  useEffect(() => {
-    if (window.matchMedia?.('(prefers-reduced-motion: reduce)').matches) {
-      heroVideoRef.current?.pause()
-    }
-  }, [])
-
   const heroBanners  = banners.filter((b) => b.position === 'hero')
   const promoBanners = banners.filter((b) => b.position === 'promo')
   const midBanners   = banners.filter((b) => b.position === 'mid')
 
-  const heroImageUrl = settings.hero_image_url ?? 'https://images.unsplash.com/photo-1551808525-51a94da548ce?w=1600&q=80'
   const heroTitle    = settings.hero_title    ?? heroDefaults.title
   const heroSubtitle = settings.hero_subtitle ?? heroDefaults.subtitle
 
@@ -121,23 +112,9 @@ export default function Home() {
 
       {/* Hero banner */}
       <section className="relative overflow-hidden bg-slate-900 text-white">
-        {/* Background video (muted, looped). Falls back to the hero image as a
-            poster while it loads, on autoplay-blocked browsers, or if it fails.
-            Paused automatically for visitors who prefer reduced motion. */}
-        <video
-          ref={heroVideoRef}
-          autoPlay
-          muted
-          loop
-          playsInline
-          poster={heroImageUrl}
-          className="pointer-events-none absolute inset-0 h-full w-full object-cover opacity-50"
-        >
-          <source src={`${import.meta.env.BASE_URL}hero.mp4`} type="video/mp4" />
-        </video>
-        <div className="absolute inset-0 bg-gradient-to-l from-slate-900/90 via-slate-900/60 to-slate-900/20" />
-        {/* Animated AI-detection overlay (decorative) */}
+        {/* Stylized, fully-synced AI traffic-monitoring scene (decorative) */}
         <HeroAIDetection />
+        <div className="absolute inset-0 bg-gradient-to-l from-slate-900/90 via-slate-900/55 to-slate-900/10" />
         <div className="container relative py-12 md:py-20">
           <div className="max-w-xl">
             <h1 className="text-3xl font-extrabold leading-tight md:text-5xl">{heroTitle}</h1>
