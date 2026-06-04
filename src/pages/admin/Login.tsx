@@ -37,8 +37,9 @@ export default function Login() {
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label className="label">דוא״ל</label>
+            <label className="label" htmlFor="login-email">דוא״ל</label>
             <input
+              id="login-email"
               type="email"
               required
               className="field"
@@ -48,8 +49,9 @@ export default function Login() {
             />
           </div>
           <div>
-            <label className="label">סיסמה</label>
+            <label className="label" htmlFor="login-password">סיסמה</label>
             <input
+              id="login-password"
               type="password"
               required
               className="field"
