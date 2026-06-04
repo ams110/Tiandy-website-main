@@ -1,52 +1,91 @@
-import type { CSSProperties } from 'react'
+// Stylized "AI traffic monitoring" hero scene. Fully self-contained and
+// deterministic: cars drive down stylized lanes, and the tracked cars carry
+// their detection box AS THE SAME ELEMENT — so the box is mathematically locked
+// to the car (perfect sync, unlike an overlay on real footage). Decorative:
+// aria-hidden + pointer-events-none; honors prefers-reduced-motion globally.
 
-// Decorative "live AI detection" overlay for the hero — a sweeping scan line
-// plus detection boxes that travel along the traffic flow (so they read as
-// tracking moving vehicles, matching the background video, rather than sitting
-// in fixed spots). Purely visual: aria-hidden and pointer-events-none, so it
-// never interferes with content or screen readers. Honors reduced-motion.
-type Box = {
-  label: string
-  conf: string
-  anim: string
-  dur: string
-  delay?: string
-  style: CSSProperties
+type Car = {
+  lane: number   // left position, % of hero
+  w: number      // width in px
+  dur: number    // seconds to cross
+  delay: number  // negative => already on screen
+  tracked?: boolean
+  conf?: string
 }
 
-// Each box starts near the left and drifts across the scene along a road-like
-// path. Shown on md+ only; mobile keeps just the scan line + badge.
-const boxes: Box[] = [
-  {
-    label: 'רכב',
-    conf: '97%',
-    anim: 'tdy-trk-a',
-    dur: '7.5s',
-    style: { left: '1%', top: '50%', width: 'clamp(70px,8vw,120px)', height: 'clamp(46px,5vw,80px)' },
-  },
-  {
-    label: 'רכב',
-    conf: '95%',
-    anim: 'tdy-trk-b',
-    dur: '9.5s',
-    delay: '-3s',
-    style: { left: '3%', top: '14%', width: 'clamp(60px,7vw,104px)', height: 'clamp(42px,5vw,74px)' },
-  },
-  {
-    label: 'רכב',
-    conf: '93%',
-    anim: 'tdy-trk-a',
-    dur: '8.5s',
-    delay: '-5s',
-    style: { left: '5%', top: '70%', width: 'clamp(56px,6vw,92px)', height: 'clamp(40px,4.5vw,68px)' },
-  },
+// Four lanes on the left; a mix of plain traffic and AI-tracked vehicles.
+const cars: Car[] = [
+  { lane: 5,  w: 16, dur: 9,  delay: -1 },
+  { lane: 5,  w: 15, dur: 9,  delay: -6, tracked: true, conf: '98%' },
+  { lane: 13, w: 17, dur: 11, delay: -3 },
+  { lane: 13, w: 16, dur: 11, delay: -8, tracked: true, conf: '95%' },
+  { lane: 21, w: 16, dur: 7.5, delay: -2 },
+  { lane: 21, w: 15, dur: 7.5, delay: -5.5 },
+  { lane: 29, w: 18, dur: 10, delay: -4, tracked: true, conf: '97%' },
+  { lane: 29, w: 16, dur: 10, delay: -9 },
+  { lane: 37, w: 15, dur: 8.5, delay: -1.5 },
+  { lane: 37, w: 16, dur: 8.5, delay: -6, tracked: true, conf: '93%' },
 ]
 
 export default function HeroAIDetection() {
   return (
     <div aria-hidden data-testid="hero-ai" className="pointer-events-none absolute inset-0 overflow-hidden">
-      {/* Sweeping scan line over the image side */}
-      <div className="absolute inset-y-0 left-0 w-full sm:w-3/5">
+      {/* Stylized road + moving traffic (desktop only — keeps mobile uncluttered) */}
+      <div className="absolute inset-y-0 left-0 hidden w-[44%] md:block">
+        {/* asphalt */}
+        <div className="absolute inset-0 bg-gradient-to-r from-slate-950/70 via-slate-900/40 to-transparent" />
+        {/* lane divider dashes */}
+        {[9, 17, 25, 33].map((x) => (
+          <div
+            key={x}
+            className="absolute inset-y-0"
+            style={{
+              left: `${x}%`,
+              width: '2px',
+              backgroundImage:
+                'repeating-linear-gradient(to bottom, rgba(148,163,184,0.35) 0 16px, transparent 16px 40px)',
+            }}
+          />
+        ))}
+
+        {/* cars */}
+        {cars.map((c, i) => (
+          <div
+            key={i}
+            className="tdy-drive absolute"
+            style={{
+              left: `${c.lane}%`,
+              width: `${c.w}px`,
+              height: `${Math.round(c.w * 1.8)}px`,
+              animationDuration: `${c.dur}s`,
+              animationDelay: `${c.delay}s`,
+            }}
+          >
+            {/* car body (top-down: lighter roof, headlight glow at the front/bottom) */}
+            <div
+              className="h-full w-full rounded-[4px]"
+              style={{
+                background: 'linear-gradient(180deg,#e2e8f0 0%,#94a3b8 38%,#334155 100%)',
+                boxShadow: '0 7px 12px -3px rgba(250,245,200,0.45), inset 0 0 0 1px rgba(0,0,0,0.25)',
+              }}
+            />
+            {c.tracked && (
+              <>
+                {/* corner-bracket detection box, locked to the car */}
+                <span className="absolute -left-1.5 -top-1.5 h-3 w-3 border-l-2 border-t-2 border-accent-400" />
+                <span className="absolute -right-1.5 -top-1.5 h-3 w-3 border-r-2 border-t-2 border-accent-400" />
+                <span className="absolute -bottom-1.5 -left-1.5 h-3 w-3 border-b-2 border-l-2 border-accent-400" />
+                <span className="absolute -bottom-1.5 -right-1.5 h-3 w-3 border-b-2 border-r-2 border-accent-400" />
+                <span className="absolute -inset-1.5 rounded-[3px] ring-1 ring-accent-400/30" />
+                <span className="absolute -top-5 left-1/2 -translate-x-1/2 whitespace-nowrap rounded bg-accent-500 px-1.5 py-0.5 text-[9px] font-bold leading-none text-slate-900 shadow">
+                  רכב<span className="opacity-70"> · {c.conf}</span>
+                </span>
+              </>
+            )}
+          </div>
+        ))}
+
+        {/* sweeping scan line over the road */}
         <div className="tdy-scanline absolute right-0 left-0 h-px bg-gradient-to-r from-transparent via-accent-400 to-transparent shadow-[0_0_14px_2px_rgba(110,232,79,0.55)]" />
       </div>
 
@@ -55,26 +94,6 @@ export default function HeroAIDetection() {
         <span className="tdy-dot inline-block h-2 w-2 rounded-full bg-accent-400 shadow-[0_0_8px_rgba(110,232,79,0.9)]" />
         <span className="text-[11px] font-bold tracking-wide text-accent-400">AI&nbsp;LIVE</span>
       </div>
-
-      {/* Tracking detection boxes (desktop only) */}
-      {boxes.map((b, i) => (
-        <div
-          key={i}
-          className={`${b.anim} absolute hidden md:block`}
-          style={{ ...b.style, animationDuration: b.dur, animationDelay: b.delay }}
-        >
-          {/* corner-bracket frame */}
-          <span className="absolute -left-px -top-px h-3.5 w-3.5 border-l-2 border-t-2 border-accent-400" />
-          <span className="absolute -right-px -top-px h-3.5 w-3.5 border-r-2 border-t-2 border-accent-400" />
-          <span className="absolute -bottom-px -left-px h-3.5 w-3.5 border-b-2 border-l-2 border-accent-400" />
-          <span className="absolute -bottom-px -right-px h-3.5 w-3.5 border-b-2 border-r-2 border-accent-400" />
-          <span className="absolute inset-0 rounded-[3px] ring-1 ring-accent-400/25" />
-          {/* label chip */}
-          <span className="absolute -top-5 right-0 whitespace-nowrap rounded bg-accent-500 px-1.5 py-0.5 text-[10px] font-bold leading-none text-slate-900 shadow">
-            {b.label}<span className="opacity-70"> · {b.conf}</span>
-          </span>
-        </div>
-      ))}
     </div>
   )
 }
