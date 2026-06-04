@@ -110,9 +110,12 @@ wraps everything.
   Open Graph, and JSON-LD. Add one to any new page.
 - **Form fields must associate `<label htmlFor>` with input `id`** for
   accessibility (the existing forms were fixed to do this — keep the pattern).
-- **Production base path**: `vite.config.ts` sets `base: '/Tiandy/'` for builds
-  (GitHub Pages). The router reads `basename` from `BASE_URL` in `main.tsx`. Dev
-  stays at `/`.
+- **Production base path**: `vite.config.ts` sets `base: '/Tiandy-website-main/'`
+  for builds — it MUST match the GitHub repo name, since Pages serves project
+  sites at `https://<user>.github.io/<repo>/`. The router reads `basename` from
+  `BASE_URL` in `main.tsx`. Dev stays at `/`. If the repo is renamed, update the
+  base here **and** `SITE_URL` in `src/data/content.ts` + `scripts/generate-sitemap.mjs`,
+  or every CSS/JS/route URL will 404 and the site renders unstyled.
 - Shared CSS component classes live under `@layer components` in `index.css`:
   `.btn`, `.btn-primary`, `.btn-outline`, `.btn-ghost`, `.card`, `.field`, `.label`,
   `.container`.

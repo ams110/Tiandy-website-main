@@ -5,7 +5,7 @@ import { writeFileSync } from 'node:fs'
 import { fileURLToPath } from 'node:url'
 import { dirname, resolve } from 'node:path'
 
-const SITE_URL = 'https://ams110.github.io/Tiandy'
+const SITE_URL = 'https://ams110.github.io/Tiandy-website-main'
 const __dirname = dirname(fileURLToPath(import.meta.url))
 const OUT = resolve(__dirname, '../public/sitemap.xml')
 
