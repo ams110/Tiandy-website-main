@@ -1,5 +1,6 @@
 import SectionTitle from '../components/SectionTitle'
 import Seo from '../components/Seo'
+import Icon from '../components/Icon'
 import { breadcrumbLd } from '../lib/seo'
 import { solutions } from '../data/content'
 
@@ -23,10 +24,12 @@ export default function Solutions() {
 
       <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
         {solutions.map((s) => (
-          <div key={s.slug} className="card p-6">
-            <div className="text-4xl">{s.icon}</div>
-            <h3 className="mt-4 text-xl font-bold text-slate-900">{s.title}</h3>
-            <p className="mt-2 text-slate-600">{s.desc}</p>
+          <div key={s.slug} className="rounded-2xl border border-slate-200 bg-white p-8">
+            <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-brand-50 text-brand-600">
+              <Icon name={s.icon} className="h-6 w-6" />
+            </div>
+            <h3 className="mt-5 text-xl font-semibold text-slate-900">{s.title}</h3>
+            <p className="mt-2 leading-relaxed text-slate-500">{s.desc}</p>
           </div>
         ))}
       </div>

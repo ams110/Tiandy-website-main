@@ -88,37 +88,37 @@ export const stats = [
 export const solutions = [
   {
     slug: 'retail',
-    icon: '🛍️',
+    icon: 'retail',
     title: 'קמעונאות',
     desc: 'הגנה על חנויות ומרכזי קניות, מניעת גניבות וספירת מבקרים בזמן אמת.',
   },
   {
     slug: 'city',
-    icon: '🏙️',
+    icon: 'city',
     title: 'עיר חכמה',
     desc: 'מעקב עירוני, ניהול תנועה וזיהוי לוחיות רישוי לרשויות מקומיות.',
   },
   {
     slug: 'industry',
-    icon: '🏭',
+    icon: 'industry',
     title: 'תעשייה ולוגיסטיקה',
     desc: 'אבטחת מתחמים, מחסנים ונמלים עם מצלמות עמידות ואנליטיקה.',
   },
   {
     slug: 'banking',
-    icon: '🏦',
+    icon: 'banking',
     title: 'בנקאות ופיננסים',
     desc: 'הגנה על סניפים וכספומטים עם זיהוי אירועים חריגים.',
   },
   {
     slug: 'education',
-    icon: '🎓',
+    icon: 'education',
     title: 'חינוך',
     desc: 'בטיחות בקמפוסים ובבתי ספר עם בקרת כניסה ומעקב.',
   },
   {
     slug: 'transport',
-    icon: '🚆',
+    icon: 'transport',
     title: 'תחבורה',
     desc: 'אבטחת תחנות, רכבות ושדות תעופה עם פתרונות מרכזיים.',
   },
