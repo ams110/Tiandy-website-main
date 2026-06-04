@@ -4,6 +4,7 @@ import SectionTitle from '../components/SectionTitle'
 import ProductCard from '../components/ProductCard'
 import TrustBar from '../components/TrustBar'
 import HeroAIDetection from '../components/HeroAIDetection'
+import Icon from '../components/Icon'
 import Seo from '../components/Seo'
 import { organizationLd } from '../lib/seo'
 import { getFeaturedProducts, getCategories, getSettings, getBanners } from '../lib/api'
@@ -115,12 +116,12 @@ export default function Home() {
         {/* Stylized, fully-synced AI traffic-monitoring scene (decorative) */}
         <HeroAIDetection />
         <div className="absolute inset-0 bg-gradient-to-l from-slate-900/90 via-slate-900/55 to-slate-900/10" />
-        <div className="container relative py-12 md:py-20">
+        <div className="container relative py-24 md:py-36">
           <div className="max-w-xl">
-            <h1 className="text-3xl font-extrabold leading-tight md:text-5xl">{heroTitle}</h1>
-            <p className="mt-4 max-w-lg text-base text-slate-200">{heroSubtitle}</p>
-            <div className="mt-6">
-              <Link to={heroDefaults.primaryCta.to} className="btn bg-accent-500 text-white hover:bg-accent-400">
+            <h1 className="text-4xl font-bold leading-[1.1] tracking-tight md:text-6xl">{heroTitle}</h1>
+            <p className="mt-6 max-w-lg text-lg leading-relaxed text-slate-300">{heroSubtitle}</p>
+            <div className="mt-8">
+              <Link to={heroDefaults.primaryCta.to} className="btn bg-brand-500 px-6 py-3 text-white hover:bg-brand-600">
                 {heroDefaults.primaryCta.label}
               </Link>
             </div>
@@ -168,25 +169,25 @@ export default function Home() {
       <TrustBar />
 
       {/* Stats */}
-      <section className="bg-brand-700 text-white">
-        <div className="container grid grid-cols-2 gap-6 py-12 md:grid-cols-4">
+      <section className="border-b border-slate-200 bg-white">
+        <div className="container grid grid-cols-2 gap-y-10 py-16 md:grid-cols-4 md:divide-x md:divide-slate-200 md:rtl:divide-x-reverse">
           {stats.map((s) => (
-            <div key={s.label} className="text-center">
-              <div className="text-4xl font-extrabold">{s.value}</div>
-              <div className="mt-1 text-sm text-brand-100">{s.label}</div>
+            <div key={s.label} className="px-4 text-center">
+              <div className="text-4xl font-bold tracking-tight text-slate-900 md:text-5xl">{s.value}</div>
+              <div className="mt-2 text-sm font-medium uppercase tracking-wide text-slate-400">{s.label}</div>
             </div>
           ))}
         </div>
       </section>
 
       {/* Featured products */}
-      <section className="container py-16">
+      <section className="container py-24">
         <SectionTitle
           eyebrow="המוצרים שלנו"
           title="מוצרים נבחרים"
           subtitle="מבחר פתרונות מובילים למעקב ואבטחה."
         />
-        <div className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
           {featured.map((p) => (
             <ProductCard key={p.id} product={p} />
           ))}
@@ -219,7 +220,7 @@ export default function Home() {
       )}
 
       {/* Solutions */}
-      <section className="bg-slate-50 py-16">
+      <section className="bg-slate-50 py-24">
         <div className="container">
           <SectionTitle
             center
@@ -227,18 +228,20 @@ export default function Home() {
             title="פתרונות לכל תחום"
             subtitle="התאמה מדויקת לצרכים של כל ענף ותעשייה."
           />
-          <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="mt-14 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {solutions.map((s) => (
               <Link
                 to="/solutions"
                 key={s.slug}
-                className="card group p-6 transition hover:border-brand-400"
+                className="group rounded-2xl border border-slate-200 bg-white p-8 transition hover:border-brand-300 hover:shadow-lg"
               >
-                <div className="text-3xl">{s.icon}</div>
-                <h3 className="mt-3 text-lg font-bold text-slate-900 group-hover:text-brand-600">
+                <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-brand-50 text-brand-600 transition group-hover:bg-brand-500 group-hover:text-white">
+                  <Icon name={s.icon} className="h-6 w-6" />
+                </div>
+                <h3 className="mt-5 text-lg font-semibold text-slate-900">
                   {s.title}
                 </h3>
-                <p className="mt-2 text-sm text-slate-600">{s.desc}</p>
+                <p className="mt-2 text-sm leading-relaxed text-slate-500">{s.desc}</p>
               </Link>
             ))}
           </div>
@@ -246,25 +249,27 @@ export default function Home() {
       </section>
 
       {/* Why choose us */}
-      <section className="container py-16">
+      <section className="container py-24">
         <SectionTitle center eyebrow="למה אנחנו" title="יתרונות שעושים את ההבדל" />
-        <div className="mt-10 grid gap-6 md:grid-cols-3">
+        <div className="mt-14 grid gap-10 md:grid-cols-3">
           {[
-            { icon: '🛡️', t: 'אמינות מוכחת', d: 'ציוד עמיד בתקנים בינלאומיים ותמיכה לאורך זמן.' },
-            { icon: '🤖', t: 'בינה מלאכותית', d: 'זיהוי אדם ורכב והפחתת התראות שווא.' },
-            { icon: '🌐', t: 'נוכחות גלובלית', d: 'טכנולוגיה בפריסה בעשרות מדינות, מותאמת לישראל.' },
+            { icon: 'reliability', t: 'אמינות מוכחת', d: 'ציוד עמיד בתקנים בינלאומיים ותמיכה לאורך זמן.' },
+            { icon: 'ai', t: 'בינה מלאכותית', d: 'זיהוי אדם ורכב והפחתת התראות שווא.' },
+            { icon: 'global', t: 'נוכחות גלובלית', d: 'טכנולוגיה בפריסה בעשרות מדינות, מותאמת לישראל.' },
           ].map((f) => (
-            <div key={f.t} className="card p-6 text-center">
-              <div className="text-4xl">{f.icon}</div>
-              <h3 className="mt-3 text-lg font-bold text-slate-900">{f.t}</h3>
-              <p className="mt-2 text-sm text-slate-600">{f.d}</p>
+            <div key={f.t} className="text-center">
+              <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-brand-50 text-brand-600">
+                <Icon name={f.icon} className="h-7 w-7" />
+              </div>
+              <h3 className="mt-5 text-lg font-semibold text-slate-900">{f.t}</h3>
+              <p className="mt-2 text-sm leading-relaxed text-slate-500">{f.d}</p>
             </div>
           ))}
         </div>
       </section>
 
       {/* Case studies */}
-      <section className="bg-slate-50 py-16">
+      <section className="bg-slate-50 py-24">
         <div className="container">
           <SectionTitle
             center
@@ -272,15 +277,15 @@ export default function Home() {
             title="פרויקטים נבחרים"
             subtitle="תוצאות מדידות מפריסות אמיתיות בשטח."
           />
-          <div className="mt-10 grid gap-6 md:grid-cols-3">
+          <div className="mt-14 grid gap-6 md:grid-cols-3">
             {caseStudies.map((cs) => (
-              <div key={cs.slug} className="card flex flex-col p-6">
-                <span className="text-xs font-bold uppercase tracking-wide text-brand-500">
+              <div key={cs.slug} className="flex flex-col rounded-2xl border border-slate-200 bg-white p-8">
+                <span className="text-xs font-semibold uppercase tracking-[0.15em] text-brand-600">
                   {cs.industry}
                 </span>
-                <h3 className="mt-2 text-lg font-bold text-slate-900">{cs.title}</h3>
-                <p className="mt-2 flex-1 text-sm text-slate-600">{cs.desc}</p>
-                <p className="mt-4 rounded-lg bg-brand-50 px-3 py-2 text-sm font-bold text-brand-700">
+                <h3 className="mt-3 text-lg font-semibold text-slate-900">{cs.title}</h3>
+                <p className="mt-2 flex-1 text-sm leading-relaxed text-slate-500">{cs.desc}</p>
+                <p className="mt-6 border-t border-slate-100 pt-4 text-base font-semibold text-brand-600">
                   {cs.metric}
                 </p>
               </div>
@@ -290,17 +295,17 @@ export default function Home() {
       </section>
 
       {/* CTA */}
-      <section className="bg-brand-800">
-        <div className="container py-16 text-center text-white">
-          <h2 className="text-2xl font-extrabold md:text-3xl">מחפשים פתרון אבטחה לעסק שלכם?</h2>
-          <p className="mx-auto mt-3 max-w-xl text-brand-100">
+      <section className="bg-slate-900">
+        <div className="container py-24 text-center text-white">
+          <h2 className="text-3xl font-bold tracking-tight md:text-4xl">מחפשים פתרון אבטחה לעסק שלכם?</h2>
+          <p className="mx-auto mt-4 max-w-xl text-lg text-slate-300">
             צוות המומחים שלנו ישמח לבנות עבורכם מערכת מותאמת אישית.
           </p>
-          <div className="mt-6 flex flex-wrap justify-center gap-3">
-            <Link to="/quote" className="btn bg-accent-500 text-white hover:bg-accent-400">
+          <div className="mt-8 flex flex-wrap justify-center gap-3">
+            <Link to="/quote" className="btn bg-brand-500 px-6 py-3 text-white hover:bg-brand-600">
               בקשת הצעת מחיר
             </Link>
-            <Link to="/contact" className="btn border border-white/60 text-white hover:bg-white/10">
+            <Link to="/contact" className="btn border border-white/30 px-6 py-3 text-white hover:bg-white/10">
               לקבלת ייעוץ חינם
             </Link>
           </div>

@@ -12,12 +12,12 @@ export default function SectionTitle({
   return (
     <div className={center ? 'mx-auto max-w-2xl text-center' : 'max-w-2xl'}>
       {eyebrow && (
-        <span className="text-sm font-bold uppercase tracking-wide text-brand-500">
+        <span className="text-xs font-semibold uppercase tracking-[0.2em] text-brand-600">
           {eyebrow}
         </span>
       )}
-      <h2 className="mt-1 text-3xl font-extrabold text-slate-900">{title}</h2>
-      {subtitle && <p className="mt-3 text-slate-600">{subtitle}</p>}
+      <h2 className="mt-3 text-3xl font-bold tracking-tight text-slate-900 md:text-4xl">{title}</h2>
+      {subtitle && <p className="mt-4 text-lg leading-relaxed text-slate-500">{subtitle}</p>}
     </div>
   )
 }

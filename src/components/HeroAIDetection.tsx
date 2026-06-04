@@ -13,29 +13,25 @@ type Car = {
   conf?: string
 }
 
-// Four lanes on the left; a mix of plain traffic and AI-tracked vehicles.
+// A few lanes on the left; mostly calm traffic with just two AI-tracked
+// vehicles so the scene stays elegant and never competes with the headline.
 const cars: Car[] = [
-  { lane: 5,  w: 16, dur: 9,  delay: -1 },
-  { lane: 5,  w: 15, dur: 9,  delay: -6, tracked: true, conf: '98%' },
-  { lane: 13, w: 17, dur: 11, delay: -3 },
-  { lane: 13, w: 16, dur: 11, delay: -8, tracked: true, conf: '95%' },
-  { lane: 21, w: 16, dur: 7.5, delay: -2 },
-  { lane: 21, w: 15, dur: 7.5, delay: -5.5 },
-  { lane: 29, w: 18, dur: 10, delay: -4, tracked: true, conf: '97%' },
-  { lane: 29, w: 16, dur: 10, delay: -9 },
-  { lane: 37, w: 15, dur: 8.5, delay: -1.5 },
-  { lane: 37, w: 16, dur: 8.5, delay: -6, tracked: true, conf: '93%' },
+  { lane: 7,  w: 15, dur: 15, delay: -2 },
+  { lane: 7,  w: 14, dur: 15, delay: -10, tracked: true, conf: '98%' },
+  { lane: 17, w: 15, dur: 18, delay: -6 },
+  { lane: 27, w: 16, dur: 13, delay: -3, tracked: true, conf: '96%' },
+  { lane: 27, w: 14, dur: 13, delay: -9 },
+  { lane: 36, w: 14, dur: 16, delay: -5 },
 ]
 
 export default function HeroAIDetection() {
   return (
     <div aria-hidden data-testid="hero-ai" className="pointer-events-none absolute inset-0 overflow-hidden">
-      {/* Stylized road + moving traffic (desktop only — keeps mobile uncluttered) */}
-      <div className="absolute inset-y-0 left-0 hidden w-[44%] md:block">
-        {/* asphalt */}
-        <div className="absolute inset-0 bg-gradient-to-r from-slate-950/70 via-slate-900/40 to-transparent" />
+      {/* Stylized road + moving traffic (desktop only — keeps mobile uncluttered).
+          Kept subtle (low opacity) so it reads as quiet ambiance, not clutter. */}
+      <div className="absolute inset-y-0 left-0 hidden w-[42%] opacity-60 md:block">
         {/* lane divider dashes */}
-        {[9, 17, 25, 33].map((x) => (
+        {[12, 22, 32].map((x) => (
           <div
             key={x}
             className="absolute inset-y-0"
@@ -43,7 +39,7 @@ export default function HeroAIDetection() {
               left: `${x}%`,
               width: '2px',
               backgroundImage:
-                'repeating-linear-gradient(to bottom, rgba(148,163,184,0.35) 0 16px, transparent 16px 40px)',
+                'repeating-linear-gradient(to bottom, rgba(148,163,184,0.18) 0 18px, transparent 18px 46px)',
             }}
           />
         ))}
@@ -61,12 +57,12 @@ export default function HeroAIDetection() {
               animationDelay: `${c.delay}s`,
             }}
           >
-            {/* car body (top-down: lighter roof, headlight glow at the front/bottom) */}
+            {/* car body (top-down, dimmed so it stays subtle) */}
             <div
               className="h-full w-full rounded-[4px]"
               style={{
-                background: 'linear-gradient(180deg,#e2e8f0 0%,#94a3b8 38%,#334155 100%)',
-                boxShadow: '0 7px 12px -3px rgba(250,245,200,0.45), inset 0 0 0 1px rgba(0,0,0,0.25)',
+                background: 'linear-gradient(180deg,#cbd5e1 0%,#64748b 45%,#334155 100%)',
+                boxShadow: '0 5px 9px -3px rgba(226,232,240,0.25)',
               }}
             />
             {c.tracked && (

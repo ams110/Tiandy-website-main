@@ -5,30 +5,28 @@ import { certifications, clients } from '../data/content'
 export default function TrustBar() {
   return (
     <section className="border-y border-slate-200 bg-white">
-      <div className="container py-8">
-        <p className="text-center text-xs font-bold uppercase tracking-wide text-slate-400">
+      <div className="container py-14">
+        <p className="text-center text-xs font-semibold uppercase tracking-[0.2em] text-slate-400">
           תקנים ותאימות
         </p>
-        <div className="mt-4 flex flex-wrap items-center justify-center gap-3">
+        <div className="mt-6 flex flex-wrap items-center justify-center gap-x-10 gap-y-4">
           {certifications.map((c) => (
-            <div
+            <span
               key={c.code}
-              className="flex items-center gap-2 rounded-lg border border-slate-200 bg-slate-50 px-3 py-2"
+              className="text-base font-semibold tracking-wide text-slate-400 transition hover:text-slate-700"
               title={c.label}
             >
-              <span className="text-lg" aria-hidden>{c.icon}</span>
-              <span className="text-sm font-bold text-slate-700">{c.code}</span>
-              <span className="hidden text-xs text-slate-400 sm:inline">{c.label}</span>
-            </div>
+              {c.code}
+            </span>
           ))}
         </div>
 
-        <p className="mt-8 text-center text-xs font-bold uppercase tracking-wide text-slate-400">
+        <p className="mt-12 text-center text-xs font-semibold uppercase tracking-[0.2em] text-slate-400">
           לקוחות ושותפים
         </p>
-        <div className="mt-4 flex flex-wrap items-center justify-center gap-x-8 gap-y-3">
+        <div className="mt-6 flex flex-wrap items-center justify-center gap-x-10 gap-y-4">
           {clients.map((c) => (
-            <span key={c.name} className="text-sm font-medium text-slate-500">
+            <span key={c.name} className="text-sm font-medium text-slate-400">
               {c.name}
             </span>
           ))}
