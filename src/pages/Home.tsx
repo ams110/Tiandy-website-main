@@ -4,6 +4,7 @@ import SectionTitle from '../components/SectionTitle'
 import ProductCard from '../components/ProductCard'
 import TrustBar from '../components/TrustBar'
 import HeroAIDetection from '../components/HeroAIDetection'
+import Camera3DShowcase from '../components/Camera3DShowcase'
 import Icon from '../components/Icon'
 import Seo from '../components/Seo'
 import { organizationLd } from '../lib/seo'
@@ -167,6 +168,9 @@ export default function Home() {
 
       {/* Trust signals */}
       <TrustBar />
+
+      {/* Interactive 3D camera showcase (Tiandy TC-H389M PTZ) */}
+      <Camera3DShowcase />
 
       {/* Stats */}
       <section className="border-b border-slate-200 bg-white">
