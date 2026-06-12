@@ -12,6 +12,10 @@ import {
   Mail,
   MapPin,
   Clock,
+  ZoomIn,
+  Moon,
+  Box,
+  Aperture,
   type LucideIcon,
 } from 'lucide-react'
 
@@ -35,6 +39,11 @@ const REGISTRY: Record<string, LucideIcon> = {
   mail: Mail,
   address: MapPin,
   clock: Clock,
+  // 3D camera showcase
+  zoom: ZoomIn,
+  night: Moon,
+  cube: Box,
+  aperture: Aperture,
 }
 
 export default function Icon({

@@ -78,6 +78,31 @@ export const hero = {
   secondaryCta: { label: 'דברו איתנו', to: '/contact' },
 }
 
+// Interactive 3D camera showcase (homepage section, rendered by
+// src/components/Camera3DShowcase.tsx). Based on a real Tiandy flagship:
+// the TC-H389M Ultra Series Super StarLight 8MP PTZ (44x optical zoom,
+// AI auto-tracking / AEW, Super StarLight low-light, IP66). All specs and
+// copy are Hebrew/RTL; the 3D model is built procedurally with Three.js.
+export const showcase3d = {
+  eyebrow: 'חוויה תלת-ממדית',
+  title: 'הכירו את המצלמה — בתלת-ממד',
+  subtitle:
+    'סובבו, התקרבו וגלו כל פרט. דגם הדגל שלנו במצלמת PTZ חכמה — ראש המצלמה סורק את הסביבה בזמן אמת בדיוק כמו מעקב AI אמיתי בשטח.',
+  model: 'Tiandy TC-H389M',
+  modelTag: 'Ultra Series · Super StarLight · PTZ',
+  resolution: '8MP · 4K',
+  badge: 'AI LIVE · 44×',
+  hint: 'גררו לסיבוב · ההדגמה אינטראקטיבית',
+  features: [
+    { icon: 'zoom', label: 'זום אופטי', value: '44× + 16× דיגיטלי' },
+    { icon: 'ai', label: 'מעקב אוטומטי', value: 'AI Auto-Tracking (AEW)' },
+    { icon: 'night', label: 'ראייה בחושך', value: '0.0008 Lux · Super StarLight' },
+    { icon: 'reliability', label: 'עמידות לתנאי חוץ', value: 'IP66 · גוף מתכת' },
+  ],
+  primaryCta: { label: 'בקשת הצעת מחיר', to: '/quote?product=Tiandy TC-H389M' },
+  secondaryCta: { label: 'לכל המוצרים', to: '/products' },
+}
+
 export const stats = [
   { value: '15+', label: 'שנות ניסיון בתחום' },
   { value: '60+', label: 'מדינות פעילות' },
