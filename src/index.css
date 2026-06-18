@@ -30,26 +30,53 @@ body {
 }
 
 @layer components {
+  /* Tactile press feedback (active:) + a focus ring keep every button feeling
+     physical and accessible. Primary uses brand-700/800 so white label text
+     clears WCAG AA contrast (brand-500 + white was only ~2:1). */
   .btn {
-    @apply inline-flex items-center justify-center gap-2 rounded-lg px-5 py-2.5 text-sm font-medium transition focus:outline-none focus:ring-2 focus:ring-brand-400 focus:ring-offset-2;
+    @apply inline-flex items-center justify-center gap-2 rounded-lg px-5 py-2.5 text-sm font-medium transition duration-200 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:ring-offset-2 active:translate-y-px;
   }
   .btn-primary {
-    @apply btn bg-brand-500 text-white hover:bg-brand-600;
+    @apply btn bg-brand-700 text-white shadow-sm shadow-brand-900/20 hover:bg-brand-800;
   }
   .btn-outline {
-    @apply btn border border-brand-500 text-brand-600 hover:bg-brand-50;
+    @apply btn border border-brand-600 text-brand-700 hover:bg-brand-50;
   }
   .btn-ghost {
     @apply btn text-slate-600 hover:bg-slate-100;
   }
   .card {
-    @apply rounded-xl border border-slate-200 bg-white shadow-sm transition hover:shadow-md;
+    @apply rounded-xl border border-slate-200 bg-white shadow-sm shadow-slate-900/5 transition duration-300 hover:-translate-y-0.5 hover:shadow-lg hover:shadow-slate-900/10;
   }
   .field {
-    @apply w-full rounded-lg border border-slate-300 px-3 py-2 text-sm outline-none focus:border-brand-400 focus:ring-1 focus:ring-brand-400;
+    @apply w-full rounded-lg border border-slate-300 px-3 py-2 text-sm outline-none transition focus:border-brand-500 focus:ring-1 focus:ring-brand-500;
   }
   .label {
     @apply mb-1 block text-sm font-medium text-slate-700;
+  }
+}
+
+/* ── Scroll-reveal (see components/Reveal.tsx) ──────────────────────────────
+   SSR/SEO-safe: content is fully visible by default. The hidden→in animation
+   is gated behind the `.js` class (added synchronously in index.html before
+   first paint), so prerendered HTML and no-JS visitors always see the content,
+   and there is no hide-flash on hydration. Reduced-motion users skip it. */
+.js .reveal {
+  opacity: 0;
+  transform: translateY(18px);
+  transition:
+    opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: opacity, transform;
+}
+.js .reveal.is-in {
+  opacity: 1;
+  transform: none;
+}
+@media (prefers-reduced-motion: reduce) {
+  .js .reveal {
+    opacity: 1 !important;
+    transform: none !important;
   }
 }
 

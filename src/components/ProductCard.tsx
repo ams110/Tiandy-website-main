@@ -17,14 +17,15 @@ export default function ProductCard({ product }: { product: Product }) {
         )}
       </div>
       <div className="p-4">
-        <h3 className="font-bold text-slate-900 group-hover:text-brand-600">
+        <h3 className="font-bold text-slate-900 transition-colors group-hover:text-brand-700">
           {product.name_he}
         </h3>
         {product.short_desc_he && (
           <p className="mt-1 line-clamp-2 text-sm text-slate-600">{product.short_desc_he}</p>
         )}
-        <span className="mt-3 inline-block text-sm font-medium text-brand-600">
-          פרטים נוספים ←
+        <span className="mt-3 inline-flex items-center gap-1 text-sm font-medium text-brand-700">
+          פרטים נוספים
+          <span className="transition-transform duration-200 group-hover:-translate-x-1" aria-hidden>←</span>
         </span>
       </div>
     </Link>

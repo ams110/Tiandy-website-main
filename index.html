@@ -5,6 +5,9 @@
     <link rel="icon" type="image/svg+xml" href="/logo.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="theme-color" content="#23671a" />
+    <!-- Marks JS as available BEFORE first paint so scroll-reveal can start
+         hidden without a flash. No-JS / prerendered HTML keeps content visible. -->
+    <script>document.documentElement.classList.add('js')</script>
     <!-- Per-page title, description, Open Graph and JSON-LD are injected
          (at build time for prerendered pages, at runtime otherwise) by the
          Seo component via vite-react-ssg. -->
