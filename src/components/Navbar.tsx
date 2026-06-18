@@ -4,6 +4,7 @@ import { nav, site, telHref, mailHref } from '../data/content'
 import { getCategories } from '../lib/api'
 import type { Category } from '../lib/types'
 import Logo from './Logo'
+import Icon from './Icon'
 
 export default function Navbar() {
   const [open, setOpen] = useState(false)
@@ -26,13 +27,19 @@ export default function Navbar() {
       <div className="hidden bg-brand-800 text-brand-100 md:block">
         <div className="container flex h-9 items-center justify-between text-xs">
           <div className="flex items-center gap-4">
-            <a href={telHref} className="hover:text-white">📞 {site.phone}</a>
-            <a href={mailHref} className="hover:text-white">✉️ {site.email}</a>
+            <a href={telHref} className="flex items-center gap-1.5 hover:text-white">
+              <Icon name="phone" className="h-3.5 w-3.5" /> {site.phone}
+            </a>
+            <a href={mailHref} className="flex items-center gap-1.5 hover:text-white">
+              <Icon name="mail" className="h-3.5 w-3.5" /> {site.email}
+            </a>
           </div>
           <div className="flex items-center gap-4">
             <Link to="/contact" className="hover:text-white">תמיכה</Link>
             <span className="text-brand-300">|</span>
-            <span>🌐 ישראל (עברית)</span>
+            <span className="flex items-center gap-1.5">
+              <Icon name="region" className="h-3.5 w-3.5" /> ישראל (עברית)
+            </span>
           </div>
         </div>
       </div>
@@ -195,11 +202,11 @@ export default function Navbar() {
 
             {/* Contact shortcuts — tap to call / email */}
             <div className="mt-3 flex flex-col gap-1 border-t border-slate-100 pt-3 text-sm">
-              <a href={telHref} className="rounded-lg px-3 py-2.5 text-slate-600 hover:bg-slate-50">
-                📞 {site.phone}
+              <a href={telHref} className="flex items-center gap-2 rounded-lg px-3 py-2.5 text-slate-600 hover:bg-slate-50">
+                <Icon name="phone" className="h-4 w-4 text-brand-700" /> {site.phone}
               </a>
-              <a href={mailHref} className="rounded-lg px-3 py-2.5 text-slate-600 hover:bg-slate-50">
-                ✉️ {site.email}
+              <a href={mailHref} className="flex items-center gap-2 rounded-lg px-3 py-2.5 text-slate-600 hover:bg-slate-50">
+                <Icon name="mail" className="h-4 w-4 text-brand-700" /> {site.email}
               </a>
             </div>
           </div>

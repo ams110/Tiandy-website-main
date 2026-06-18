@@ -6,14 +6,12 @@ export default function TrustBar() {
   return (
     <section className="border-y border-slate-200 bg-white">
       <div className="container py-14">
-        <p className="text-center text-xs font-semibold uppercase tracking-[0.2em] text-slate-400">
-          תקנים ותאימות
-        </p>
+        <p className="text-center text-sm font-semibold text-slate-500">תקנים ותאימות</p>
         <div className="mt-6 flex flex-wrap items-center justify-center gap-x-10 gap-y-4">
           {certifications.map((c) => (
             <span
               key={c.code}
-              className="text-base font-semibold tracking-wide text-slate-400 transition hover:text-slate-700"
+              className="text-base font-semibold tracking-wide text-slate-500 transition hover:text-brand-700"
               title={c.label}
             >
               {c.code}
@@ -21,12 +19,13 @@ export default function TrustBar() {
           ))}
         </div>
 
-        <p className="mt-12 text-center text-xs font-semibold uppercase tracking-[0.2em] text-slate-400">
-          לקוחות ושותפים
-        </p>
-        <div className="mt-6 flex flex-wrap items-center justify-center gap-x-10 gap-y-4">
+        <p className="mt-12 text-center text-sm font-semibold text-slate-500">לקוחות ושותפים</p>
+        <div className="mt-6 flex flex-wrap items-center justify-center gap-x-8 gap-y-4">
           {clients.map((c) => (
-            <span key={c.name} className="text-sm font-medium text-slate-400">
+            <span
+              key={c.name}
+              className="rounded-full border border-slate-200 bg-slate-50 px-4 py-1.5 text-sm font-medium text-slate-500"
+            >
               {c.name}
             </span>
           ))}
